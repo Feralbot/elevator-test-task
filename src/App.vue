@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="elevator">
-      <div class="elevator-cabine"></div>
+      <div class="elevator-cabine"> <div class="elevator-cabine-table"> <div class="elevator-cabine-table-text"></div> {{ elevationPath }} {{ currentFlour }}</div></div>
     </div>
     <div class="buttons">
       <div class="flours">
@@ -46,9 +46,11 @@ gsap.registerPlugin(
 const flours = ref([1, 2, 3, 4, 5]);
 const currentFlour = ref(1);
 const flourQueue = ref([]);
+const elevationPath=ref('');
 
 async function moveElevator(newFlour, oldFlour) {
   if (newFlour > oldFlour) {
+    elevationPath.value='↑ '
     await gsap
       .timeline()
       .to(".elevator-cabine", {
@@ -60,6 +62,7 @@ async function moveElevator(newFlour, oldFlour) {
         backgroundColor: "red",
       });
   } else {
+    elevationPath.value='↓ '
     await gsap
       .timeline()
       .to(".elevator-cabine", {
@@ -71,6 +74,7 @@ async function moveElevator(newFlour, oldFlour) {
         backgroundColor: "red",
       });
   }
+  elevationPath.value=''
 }
 
 watch(currentFlour, (newFlour, oldFlour) => {
