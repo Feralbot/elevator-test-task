@@ -13,6 +13,7 @@
         <div class="flour" v-for="flour in flours" :key="flour">
           <button
             class="flour-btn"
+            :disabled="elevateInProgress"
             :class="{
               'flour-waiting': currentFlour == flour && elevateInProgress,
             }"
@@ -20,9 +21,6 @@
           >
             {{ flour }}
           </button>
-          <div class="status" v-for="order in flourQueue" :key="order">
-            {{ order.index }} {{ order.status }}
-          </div>
         </div>
       </div>
     </div>
