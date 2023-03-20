@@ -1,26 +1,19 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <main>
+    <div class="elevator"><div class="elevator-cabine"></div></div>
+    <div class="buttons">
+      <div class="flours">
+        <div class="flour" v-for="flour in flours" :key="flour">
+          <button>{{ flour }}</button>
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+<script setup>
+import { ref } from "vue";
+const flours = ref([1, 2, 3, 4, 5]);
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style src="./styles/reset.css"></style>
+<style src="./styles/main.css"></style>

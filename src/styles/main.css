@@ -1,0 +1,34 @@
+main {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.elevator {
+  border: 1px solid black;
+  width: 15%;
+}
+.elevator-cabine {
+  position: absolute;
+  background-color: blue;
+  width: 15%;
+  height: 20vh;
+  bottom: 0;
+}
+.buttons {
+  border: 1px solid black;
+  width: 75%;
+}
+.flours {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 100%;
+}
+.flour {
+  height: 20%;
+  border-bottom: 1px solid black;
+}
+hr {
+  margin: 0;
+}
