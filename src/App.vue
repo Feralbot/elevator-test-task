@@ -13,8 +13,10 @@
         <div class="flour" v-for="flour in flours" :key="flour">
           <button
             class="flour-btn"
-            :class="{'flour-waiting': (currentFlour==flour && elevateInProgress)}"
-            @click="currentFlour = flour "
+            :class="{
+              'flour-waiting': currentFlour == flour && elevateInProgress,
+            }"
+            @click="currentFlour = flour"
           >
             {{ flour }}
           </button>
@@ -28,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -56,10 +58,18 @@ const flours = ref([1, 2, 3, 4, 5]);
 const currentFlour = ref(1);
 const flourQueue = ref([]);
 const elevationPath = ref("");
-const elevateInProgress=ref(false);
+const elevateInProgress = ref(false);
+
+onMounted(() => {
+  const flourData = localStorage.getItem("currentFlour");
+  if (flourData) {
+    currentFlour.value = JSON.parse(flourData);
+    console.log(currentFlour.value);
+  }
+});
 
 async function moveElevator(newFlour, oldFlour) {
-  elevateInProgress.value=true;
+  elevateInProgress.value = true;
   if (newFlour > oldFlour) {
     elevationPath.value = "↑ ";
     await gsap
@@ -86,10 +96,12 @@ async function moveElevator(newFlour, oldFlour) {
       });
   }
   elevationPath.value = "";
-  elevateInProgress.value=false;
+  elevateInProgress.value = false;
 }
 
 watch(currentFlour, (newFlour, oldFlour) => {
+  localStorage.setItem("currentFlour", JSON.stringify(newFlour));
+
   if (newFlour != oldFlour) {
     flourQueue.value.push({
       newFlour: newFlour,
