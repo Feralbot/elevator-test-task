@@ -1,12 +1,21 @@
 <template>
   <main>
     <div class="elevator">
-      <div class="elevator-cabine"> <div class="elevator-cabine-table"> <div class="elevator-cabine-table-text"></div> {{ elevationPath }} {{ currentFlour }}</div></div>
+      <div class="elevator-cabine">
+        <div class="elevator-cabine-table">
+          <div class="elevator-cabine-table-text"></div>
+          {{ elevationPath }} {{ currentFlour }}
+        </div>
+      </div>
     </div>
     <div class="buttons">
       <div class="flours">
         <div class="flour" v-for="flour in flours" :key="flour">
-          <button class="flour-btn" @click="currentFlour = flour">
+          <button
+            class="flour-btn"
+            :class="{'flour-waiting':currentFlour}"
+            @click="currentFlour = flour"
+          >
             {{ flour }}
           </button>
           <div class="status" v-for="order in flourQueue" :key="order">
@@ -46,11 +55,11 @@ gsap.registerPlugin(
 const flours = ref([1, 2, 3, 4, 5]);
 const currentFlour = ref(1);
 const flourQueue = ref([]);
-const elevationPath=ref('');
+const elevationPath = ref("");
 
 async function moveElevator(newFlour, oldFlour) {
   if (newFlour > oldFlour) {
-    elevationPath.value='↑ '
+    elevationPath.value = "↑ ";
     await gsap
       .timeline()
       .to(".elevator-cabine", {
@@ -62,7 +71,7 @@ async function moveElevator(newFlour, oldFlour) {
         backgroundColor: "red",
       });
   } else {
-    elevationPath.value='↓ '
+    elevationPath.value = "↓ ";
     await gsap
       .timeline()
       .to(".elevator-cabine", {
@@ -74,7 +83,7 @@ async function moveElevator(newFlour, oldFlour) {
         backgroundColor: "red",
       });
   }
-  elevationPath.value=''
+  elevationPath.value = "";
 }
 
 watch(currentFlour, (newFlour, oldFlour) => {
@@ -86,7 +95,7 @@ watch(currentFlour, (newFlour, oldFlour) => {
     });
   }
   flourQueue.value.forEach(async (elevateOrder) => {
-   await moveElevator(newFlour, oldFlour);
+    await moveElevator(newFlour, oldFlour);
     elevateOrder.status = "done";
   });
 });
