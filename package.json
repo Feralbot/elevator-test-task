@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "gsap": "^3.11.5",
+    "pinia": "^2.0.33",
     "vue": "^3.2.13"
   },
   "devDependencies": {
