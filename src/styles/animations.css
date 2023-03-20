@@ -1,0 +1,12 @@
+.oneFlourUp {
+  animation-name: up;
+  animation-duration: 1s;
+}
+@keyframes up {
+  0% {
+    top: 0px;
+  }
+  100% {
+    top: 20vh;
+  }
+}
