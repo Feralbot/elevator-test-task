@@ -44,18 +44,32 @@ gsap.registerPlugin(
 const flours = ref([1, 2, 3, 4, 5]);
 const currentFlour = ref(1);
 const flourQueue = ref([]);
-watch(currentFlour, (flour) => {
-  flourQueue.value.push(currentFlour.value);
-  gsap
-    .timeline()
-    .to(".elevator-cabine", {
-      y: -160 * (flour - 1),
-      duration: 1 * (flour - 1),
-    })
-    .from(".elevator-cabine", {
-      duration: 3,
-      backgroundColor: "red",
-    });
+watch(currentFlour, (newFlour, oldFlour) => {
+  flourQueue.value.push(newFlour);
+
+  if (newFlour > oldFlour) {
+    return gsap
+      .timeline()
+      .to(".elevator-cabine", {
+        y: -160 * (newFlour - 1),
+        duration: newFlour - oldFlour,
+      })
+      .from(".elevator-cabine", {
+        duration: 3,
+        backgroundColor: "red",
+      });
+  } else {
+    return gsap
+      .timeline()
+      .to(".elevator-cabine", {
+        y: -160 * (newFlour - 1),
+        duration: oldFlour - newFlour,
+      })
+      .from(".elevator-cabine", {
+        duration: 3,
+        backgroundColor: "red",
+      });
+  }
 });
 </script>
 <style src="./styles/reset.css"></style>
