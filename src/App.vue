@@ -117,4 +117,3 @@ watch(currentFlour, (newFlour, oldFlour) => {
 </script>
 <style src="./styles/reset.css"></style>
 <style src="./styles/main.css"></style>
-<style src="./styles/animations.css"></style>
