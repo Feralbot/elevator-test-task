@@ -107,8 +107,10 @@ watch(currentFlour, (newFlour, oldFlour) => {
     });
   }
   flourQueue.value.forEach(async (elevateOrder) => {
-    await moveElevator(newFlour, oldFlour);
-    elevateOrder.status = "done";
+    if (elevateOrder.status != "done") {
+      await gsap.timeline().to(elevateOrder, moveElevator(newFlour, oldFlour));
+      elevateOrder.status = "done";
+    }
   });
 });
 </script>
