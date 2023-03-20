@@ -28,28 +28,6 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import { gsap } from "gsap";
-import { Flip } from "gsap/Flip";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Observer } from "gsap/Observer";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { Draggable } from "gsap/Draggable";
-import { EaselPlugin } from "gsap/EaselPlugin";
-import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-import { PixiPlugin } from "gsap/PixiPlugin";
-import { TextPlugin } from "gsap/TextPlugin";
-
-gsap.registerPlugin(
-  Flip,
-  ScrollTrigger,
-  Observer,
-  ScrollToPlugin,
-  Draggable,
-  EaselPlugin,
-  MotionPathPlugin,
-  PixiPlugin,
-  TextPlugin
-);
 
 const flours = ref([1, 2, 3, 4, 5]);
 const currentFlour = ref(1);
@@ -69,28 +47,10 @@ async function moveElevator(newFlour, oldFlour) {
   elevateInProgress.value = true;
   if (newFlour > oldFlour) {
     elevationPath.value = "↑ ";
-    await gsap
-      .timeline()
-      .to(".elevator-cabine", {
-        y: -160 * (newFlour - 1),
-        duration: newFlour - oldFlour,
-      })
-      .from(".elevator-cabine", {
-        duration: 3,
-        backgroundColor: "red",
-      });
+   ///
   } else {
     elevationPath.value = "↓ ";
-    await gsap
-      .timeline()
-      .to(".elevator-cabine", {
-        y: -160 * (newFlour - 1),
-        duration: oldFlour - newFlour,
-      })
-      .from(".elevator-cabine", {
-        duration: 3,
-        backgroundColor: "red",
-      });
+   ///
   }
   elevationPath.value = "";
   elevateInProgress.value = false;
@@ -108,7 +68,7 @@ watch(currentFlour, (newFlour, oldFlour) => {
   }
   flourQueue.value.forEach(async (elevateOrder) => {
     if (elevateOrder.status != "done") {
-      await gsap.timeline().to(elevateOrder, moveElevator(newFlour, oldFlour));
+    moveElevator(newFlour, oldFlour)
       elevateOrder.status = "done";
     }
   });
