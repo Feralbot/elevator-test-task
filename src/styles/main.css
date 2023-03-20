@@ -48,6 +48,9 @@ font-size: medium;
   height: 160px;
   border-bottom: 1px solid black;
 }
+.flour-waiting{
+    background-color: rgb(238, 204, 83);
+}
 button {
   height: 100%;
   width: 100px;
