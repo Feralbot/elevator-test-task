@@ -4,9 +4,9 @@
 }
 @keyframes up {
   0% {
-    top: 0px;
+    bottom: 0px;
   }
   100% {
-    top: 20vh;
+    bottom: 20vh;
   }
 }
