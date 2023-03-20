@@ -9,7 +9,9 @@
           <button class="flour-btn" @click="currentFlour = flour">
             {{ flour }}
           </button>
-          {{ flourQueue }}
+          <div class="status" v-for="order in flourQueue" :key="order">
+            {{ order.index }} {{ order.status }}
+          </div>
         </div>
       </div>
     </div>
@@ -44,11 +46,10 @@ gsap.registerPlugin(
 const flours = ref([1, 2, 3, 4, 5]);
 const currentFlour = ref(1);
 const flourQueue = ref([]);
-watch(currentFlour, (newFlour, oldFlour) => {
-  flourQueue.value.push(newFlour);
 
+async function moveElevator(newFlour, oldFlour) {
   if (newFlour > oldFlour) {
-    return gsap
+    await gsap
       .timeline()
       .to(".elevator-cabine", {
         y: -160 * (newFlour - 1),
@@ -59,7 +60,7 @@ watch(currentFlour, (newFlour, oldFlour) => {
         backgroundColor: "red",
       });
   } else {
-    return gsap
+    await gsap
       .timeline()
       .to(".elevator-cabine", {
         y: -160 * (newFlour - 1),
@@ -70,6 +71,20 @@ watch(currentFlour, (newFlour, oldFlour) => {
         backgroundColor: "red",
       });
   }
+}
+
+watch(currentFlour, (newFlour, oldFlour) => {
+  if (newFlour != oldFlour) {
+    flourQueue.value.push({
+      newFlour: newFlour,
+      oldFlour: oldFlour,
+      status: "inQueue",
+    });
+  }
+  flourQueue.value.forEach(async (elevateOrder) => {
+   await moveElevator(newFlour, oldFlour);
+    elevateOrder.status = "done";
+  });
 });
 </script>
 <style src="./styles/reset.css"></style>
