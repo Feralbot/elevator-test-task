@@ -20,9 +20,6 @@
           >
             {{ flour }}
           </button>
-          <div class="status" v-for="order in flourQueue" :key="order">
-            {{ order.index }} {{ order.status }}
-          </div>
         </div>
       </div>
     </div>
