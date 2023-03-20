@@ -1,10 +1,7 @@
 <template>
   <main>
     <div class="elevator">
-      <div
-        class="elevator-cabine"
-        :style="{ bottom: `${elevatorHeight}vh` }"
-      ></div>
+      <div class="elevator-cabine"></div>
     </div>
     <div class="buttons">
       <div class="flours">
@@ -12,7 +9,7 @@
           <button class="flour-btn" @click="currentFlour = flour">
             {{ flour }}
           </button>
-          {{ currentFlour }}
+          {{ flourQueue }}
         </div>
       </div>
     </div>
@@ -45,13 +42,21 @@ gsap.registerPlugin(
 );
 
 const flours = ref([1, 2, 3, 4, 5]);
-const currentFlour = ref("");
-const elevatorHeight = ref(0);
+const currentFlour = ref(1);
+const flourQueue = ref([]);
 watch(currentFlour, (flour) => {
-  gsap.to(".elevator-cabine", { y: -160 * (flour - 1), duration: 1 });
+  flourQueue.value.push(currentFlour.value);
+  gsap
+    .timeline()
+    .to(".elevator-cabine", {
+      y: -160 * (flour - 1),
+      duration: 1 * (flour - 1),
+    })
+    .from(".elevator-cabine", {
+      duration: 3,
+      backgroundColor: "red",
+    });
 });
-
-// elevatorHeight.value = currentFlour.value * 20 - 20;
 </script>
 <style src="./styles/reset.css"></style>
 <style src="./styles/main.css"></style>
