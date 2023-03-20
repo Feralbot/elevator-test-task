@@ -13,8 +13,8 @@
         <div class="flour" v-for="flour in flours" :key="flour">
           <button
             class="flour-btn"
-            :class="{'flour-waiting':currentFlour}"
-            @click="currentFlour = flour"
+            :class="{'flour-waiting': (currentFlour==flour && elevateInProgress)}"
+            @click="currentFlour = flour "
           >
             {{ flour }}
           </button>
@@ -56,8 +56,10 @@ const flours = ref([1, 2, 3, 4, 5]);
 const currentFlour = ref(1);
 const flourQueue = ref([]);
 const elevationPath = ref("");
+const elevateInProgress=ref(false);
 
 async function moveElevator(newFlour, oldFlour) {
+  elevateInProgress.value=true;
   if (newFlour > oldFlour) {
     elevationPath.value = "↑ ";
     await gsap
@@ -84,6 +86,7 @@ async function moveElevator(newFlour, oldFlour) {
       });
   }
   elevationPath.value = "";
+  elevateInProgress.value=false;
 }
 
 watch(currentFlour, (newFlour, oldFlour) => {
