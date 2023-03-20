@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="elevator">
-      <div class="elevator-cabine">
+      <div class="elevator-cabine" :class="{ shake: elevateInProgress }" >
         <div class="elevator-cabine-table">
           <div class="elevator-cabine-table-text"></div>
           {{ elevationPath }} {{ currentFlour }}
@@ -39,11 +39,10 @@ onMounted(() => {
   const flourData = localStorage.getItem("currentFlour");
   if (flourData) {
     currentFlour.value = JSON.parse(flourData);
-    console.log(currentFlour.value);
   }
 });
 
-async function moveElevator(newFlour, oldFlour) {
+ function moveElevator(newFlour, oldFlour) {
   elevateInProgress.value = true;
   if (newFlour > oldFlour) {
     elevationPath.value = "↑ ";
@@ -58,7 +57,7 @@ async function moveElevator(newFlour, oldFlour) {
 
 watch(currentFlour, (newFlour, oldFlour) => {
   localStorage.setItem("currentFlour", JSON.stringify(newFlour));
-
+  elevateInProgress.value=true;
   if (newFlour != oldFlour) {
     flourQueue.value.push({
       newFlour: newFlour,
@@ -76,3 +75,4 @@ watch(currentFlour, (newFlour, oldFlour) => {
 </script>
 <style src="./styles/reset.css"></style>
 <style src="./styles/main.css"></style>
+<style src="./styles/animations.css"></style>
