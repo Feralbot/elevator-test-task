@@ -9,18 +9,18 @@
       >
         <div class="elevator-cabine-table">
           <div class="elevator-cabine-table-text"></div>
-          {{ elevatorStore.elevationPath }} {{ elevatorStore.currentFlour }}
+          {{ elevatorStore.elevationPath }} {{ elevatorStore.currentFloor }}
         </div>
       </div>
     </div>
 
-    <div class="flours">
+    <div class="floors">
       <floor
-        class="flour"
-        v-for="flour in elevatorStore.flours"
-        :key="flour"
-        :floursQueue="elevatorStore.floursQueue"
-        :flour="flour"
+        class="floor"
+        v-for="floor in elevatorStore.floors"
+        :key="floor"
+        :floorsQueue="elevatorStore.floorsQueue"
+        :floor="floor"
       />
     </div>
   </main>
@@ -34,9 +34,9 @@ import floor from "./components/floor.vue";
 const elevatorStore = useElevatorStore();
 const elevatorCabine = ref();
 onMounted(() => {
-  const flourData = localStorage.getItem("currentFlour");
-  if (flourData) {
-    elevatorStore.currentFlour = JSON.parse(flourData);
+  const floorData = localStorage.getItem("currentFloor");
+  if (floorData) {
+    elevatorStore.currentFloor = JSON.parse(floorData);
   }
 });
 
@@ -47,7 +47,7 @@ function StartQueueElevating() {
     setTimeout(() => {
       elevatorStore.elevatorStatus = "rest";
       elevatorStore.elevateDelivered();
-      if (elevatorStore.floursQueue.length != 0) {
+      if (elevatorStore.floorsQueue.length != 0) {
         StartQueueElevating();
       }
     }, 3000);

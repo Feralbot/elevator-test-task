@@ -2,33 +2,33 @@ import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
 
 export const useElevatorStore = defineStore("elevatorStore", () => {
-  const flours = ref([1, 2, 3, 4, 5]);
-  const currentFlour = ref(1);
+  const floors = ref([1, 2, 3, 4, 5]);
+  const currentFloor = ref(1);
   const elevatorSpeed = ref(1);
   const elevationPath = ref("");
-  const floursQueue = ref([]);
+  const floorsQueue = ref([]);
   const elevatorStatus = ref("rest");
 
-  const flourData = localStorage.getItem("currentFlour");
-  if (flourData) {
-    currentFlour.value = JSON.parse(flourData);
+  const floorData = localStorage.getItem("currentFloor");
+  if (floorData) {
+    currentFloor.value = JSON.parse(floorData);
   }
 
   const moveElevator = computed(() => {
-    return `transform: translateY(${(currentFlour.value - 1) * -160}px`;
+    return `transform: translateY(${(currentFloor.value - 1) * -160}px`;
   });
   const smoothElevate = computed(() => {
     return `transition: transform ${elevatorSpeed.value}s`;
   });
 
-  const addToQueue = (flour) => {
-    if (!floursQueue.value.includes(flour) && currentFlour.value != flour) {
-      floursQueue.value.push(flour);
-      currentFlour.value = floursQueue.value[0];
+  const addToQueue = (floor) => {
+    if (!floorsQueue.value.includes(floor) && currentFloor.value != floor) {
+      floorsQueue.value.push(floor);
+      currentFloor.value = floorsQueue.value[0];
     }
   };
   const elevateDelivered = () => {
-    floursQueue.value.shift();
+    floorsQueue.value.shift();
   };
 
   const ChangeStatus = () => {
@@ -36,18 +36,18 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   };
 
   watch(
-    floursQueue,
+    floorsQueue,
     () => {
-      if (floursQueue.value[0]) {
-        currentFlour.value = floursQueue.value[0];
+      if (floorsQueue.value[0]) {
+        currentFloor.value = floorsQueue.value[0];
       }
     },
     { deep: true }
   );
-  watch(currentFlour, (newFlour, oldFlour) => {
+  watch(currentFloor, (newFloor, oldFloor) => {
     ChangeStatus();
-    localStorage.setItem("currentFlour", JSON.stringify(newFlour));
-    if (oldFlour < newFlour) {
+    localStorage.setItem("currentFloor", JSON.stringify(newFloor));
+    if (oldFloor < newFloor) {
       elevationPath.value = "↑ ";
     } else {
       elevationPath.value = "↓ ";
@@ -55,11 +55,11 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   });
 
   return {
-    flours,
-    currentFlour,
+    floors,
+    currentFloor,
     elevatorSpeed,
     elevationPath,
-    floursQueue,
+    floorsQueue,
     elevatorStatus,
     moveElevator,
     smoothElevate,

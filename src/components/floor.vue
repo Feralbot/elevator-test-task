@@ -1,13 +1,13 @@
 <template>
-  <div class="flour">
+  <div class="floor">
     <button
-      class="flour-btn"
+      class="floor-btn"
       :class="{
-        'flour-btn__waiting': floursQueue.includes(flour),
+        'floor-btn__waiting': floorsQueue.includes(floor),
       }"
-      @click="elevatorStore.addToQueue(flour)"
+      @click="elevatorStore.addToQueue(floor)"
     >
-      {{ flour }}
+      {{ floor }}
     </button>
   </div>
 </template>
@@ -15,8 +15,8 @@
 <script setup>
 import { useElevatorStore } from "../stores/elevatorStore";
 const props = defineProps({
-  floursQueue: { Array, required: true, default: [] },
-  flour: { Number, require: true },
+  floorsQueue: { Array, required: true, default: [] },
+  floor: { Number, require: true },
 });
 const elevatorStore = useElevatorStore();
 </script>
