@@ -15,7 +15,7 @@
     </div>
 
     <div class="floors">
-      <floor
+      <floorComponent
         class="floor"
         v-for="floor in elevatorStore.floors"
         :key="floor"
@@ -29,7 +29,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { useElevatorStore } from "./stores/elevatorStore";
-import floor from "./components/floor.vue";
+import floorComponent from "./components/floor.vue";
 
 const elevatorStore = useElevatorStore();
 const elevatorCabine = ref();
