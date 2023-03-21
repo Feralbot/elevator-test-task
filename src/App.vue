@@ -7,7 +7,7 @@
       >
         <div class="elevator-cabine-table">
           <div class="elevator-cabine-table-text"></div>
-          {{ elevationPath }} {{ elevatorStore.currentFlour }}
+          {{ elevatorStore.elevationPath }} {{ elevatorStore.currentFlour }}
         </div>
       </div>
     </div>
@@ -40,25 +40,6 @@ onMounted(() => {
   if (flourData) {
     elevatorStore.currentFlour = JSON.parse(flourData);
   }
-});
-
-watch(elevatorStore.currentFlour, (newFlour) => {
-  localStorage.setItem("currentFlour", JSON.stringify(newFlour));
-  // elevateInProgress.value = true;
-  // if (newFlour != oldFlour) {
-  //   flourQueue.value.push({
-  //     newFlour: newFlour,
-  //     oldFlour: oldFlour,
-  //     status: "inQueue",
-  //   });
-  // }
-  // flourQueue.value.forEach(async (elevateOrder) => {
-  //   if (elevateOrder.status != "done") {
-  //     moveElevator(newFlour, oldFlour);
-  //     elevateOrder.status = "done";
-  //   }
-  // });
-  elevatorStore.moveElevator;
 });
 </script>
 <style src="./styles/reset.css"></style>

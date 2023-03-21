@@ -13,11 +13,21 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   if (flourData) {
     currentFlour.value = JSON.parse(flourData);
   }
+
   const moveElevator = computed(() => {
     return `transform: translateY(${(currentFlour.value - 1) * -160}px`;
   });
   const smoothElevate = computed(() => {
     return `transition: transform ${elevatorSpeed.value}s`;
+  });
+
+  watch(currentFlour, (newFlour, oldFlour) => {
+    localStorage.setItem("currentFlour", JSON.stringify(newFlour));
+    if (oldFlour < newFlour) {
+      elevationPath.value = "UP ";
+    } else {
+      elevationPath.value = "D ";
+    }
   });
 
   return {
