@@ -19,7 +19,7 @@
           <button
             class="flour-btn"
             :class="{
-              'flour-waiting': elevatorStore.currentFlour == flour,
+              'flour-waiting': elevatorStore.floursQueue.includes(flour),
             }"
             @click="elevatorStore.addToQueue(flour)"
           >
