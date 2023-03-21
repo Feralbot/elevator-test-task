@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
 
 export const useElevatorStore = defineStore("elevatorStore", () => {
-  const flours = ref(5);
+  const flours = ref([1, 2, 3, 4, 5]);
   const currentFlour = ref(1);
   const elevatorSpeed = ref(1);
   const elevationPath = ref("");

@@ -13,11 +13,11 @@
     </div>
     <div class="buttons">
       <div class="flours">
-        <div class="flour" v-for="flour in flours" :key="flour">
+        <div class="flour" v-for="flour in elevatorStore.flours" :key="flour">
           <button
             class="flour-btn"
             :class="{
-              'flour-waiting': currentFlour == flour && elevateInProgress,
+              'flour-waiting': elevatorStore.currentFlour == flour,
             }"
             @click="elevatorStore.currentFlour = flour"
           >
@@ -30,21 +30,15 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, watch } from "vue";
 import { useElevatorStore } from "./stores/elevatorStore";
 
 const elevatorStore = useElevatorStore();
 
-const flours = ref([1, 2, 3, 4, 5]);
-const currentFlour = ref(1);
-const flourQueue = ref([]);
-const elevationPath = ref("");
-const elevateInProgress = ref(false);
-
 onMounted(() => {
   const flourData = localStorage.getItem("currentFlour");
   if (flourData) {
-    currentFlour.value = JSON.parse(flourData);
+    elevatorStore.currentFlour = JSON.parse(flourData);
   }
 });
 
