@@ -19,10 +19,14 @@
             :class="{
               'flour-waiting': elevatorStore.currentFlour == flour,
             }"
-            @click="elevatorStore.currentFlour = flour"
+            @click="
+              elevatorStore.currentFlour = flour;
+              elevatorStore.addToQueue(flour);
+            "
           >
             {{ flour }}
           </button>
+          {{ elevatorStore.floursQueue }}
         </div>
       </div>
     </div>
@@ -30,7 +34,7 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from "vue";
+import { onMounted } from "vue";
 import { useElevatorStore } from "./stores/elevatorStore";
 
 const elevatorStore = useElevatorStore();

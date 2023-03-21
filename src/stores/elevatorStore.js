@@ -21,6 +21,17 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     return `transition: transform ${elevatorSpeed.value}s`;
   });
 
+  const addToQueue = (flour) => {
+    floursQueue.value.push(flour);
+  };
+  const elevateDelivered = () => {
+    floursQueue.value.shift();
+  };
+
+  const ChangeStatus = () => {
+    elevatorStatus.value = "inProgress";
+  };
+
   watch(currentFlour, (newFlour, oldFlour) => {
     localStorage.setItem("currentFlour", JSON.stringify(newFlour));
     if (oldFlour < newFlour) {
@@ -39,5 +50,8 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     elevatorStatus,
     moveElevator,
     smoothElevate,
+    addToQueue,
+    ChangeStatus,
+    elevateDelivered,
   };
 });
