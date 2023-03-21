@@ -22,7 +22,7 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   });
 
   const addToQueue = (flour) => {
-    if (!floursQueue.value.includes(flour)) {
+    if (!floursQueue.value.includes(flour) && currentFlour.value != flour) {
       floursQueue.value.push(flour);
       currentFlour.value = floursQueue.value[0];
     }

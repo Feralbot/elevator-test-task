@@ -3,7 +3,7 @@
     <div class="elevator">
       <div
         class="elevator-cabine"
-        :class="{ shake: elevatorStore.elevatorStatus == 'arrived' }"
+        :class="{ blink: elevatorStore.elevatorStatus == 'arrived' }"
         ref="elevatorCabine"
         :style="[elevatorStore.moveElevator, elevatorStore.smoothElevate]"
       >
@@ -13,21 +13,20 @@
         </div>
       </div>
     </div>
-    <div class="buttons">
-      <div class="flours">
-        <div class="flour" v-for="flour in elevatorStore.flours" :key="flour">
-          <button
-            class="flour-btn"
-            :class="{
-              'flour-waiting': elevatorStore.floursQueue.includes(flour),
-            }"
-            @click="elevatorStore.addToQueue(flour)"
-          >
-            {{ flour }}
-          </button>
-          {{ elevatorStore.floursQueue }}
-          {{ elevatorStore.elevatorStatus }}
-        </div>
+
+    <div class="flours">
+      <div class="flour" v-for="flour in elevatorStore.flours" :key="flour">
+        <button
+          class="flour-btn"
+          :class="{
+            'flour-waiting': elevatorStore.floursQueue.includes(flour),
+          }"
+          @click="elevatorStore.addToQueue(flour)"
+        >
+          {{ flour }}
+        </button>
+        {{ elevatorStore.floursQueue }}
+        {{ elevatorStore.elevatorStatus }}
       </div>
     </div>
   </main>
@@ -47,9 +46,7 @@ onMounted(() => {
 });
 
 function StartQueueElevating() {
-  //elevatorStore.moveElevator;
   elevatorCabine.value.ontransitionend = () => {
-    console.log("fsf");
     elevatorStore.elevatorStatus = "arrived";
     setTimeout(() => {
       elevatorStore.elevatorStatus = "rest";

@@ -1,4 +1,4 @@
-.shake {
+.blink {
   animation: blink 1s linear infinite;
 }
 @keyframes blink {
