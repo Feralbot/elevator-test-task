@@ -1,3 +1,25 @@
 import { defineStore } from "pinia";
-import { useMovieStore } from "./MovieStore";
-import { ref } from "vue";
+import { ref, computed, watch } from "vue";
+
+export const useElevatorStore = defineStore("elevatorStore", () => {
+  const flours = ref(5);
+  const currentFlour = ref(1);
+  const elevatorSpeed = ref(0);
+  const elevationPath = ref("");
+  const floursQueue = ref([]);
+  const elevatorStatus = ref("rest");
+
+  const flourData = localStorage.getItem("currentFlour");
+  if (flourData) {
+    currentFlour.value = JSON.parse(flourData);
+  }
+
+  return {
+    flours,
+    currentFlour,
+    elevatorSpeed,
+    elevationPath,
+    floursQueue,
+    elevatorStatus,
+  };
+});

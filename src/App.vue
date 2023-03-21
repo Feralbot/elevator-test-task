@@ -1,10 +1,10 @@
 <template>
   <main>
     <div class="elevator">
-      <div class="elevator-cabine" :class="{ shake: elevateInProgress }" >
+      <div class="elevator-cabine" :class="{ shake: elevateInProgress }">
         <div class="elevator-cabine-table">
           <div class="elevator-cabine-table-text"></div>
-          {{ elevationPath }} {{ currentFlour }}
+          {{ elevationPath }} {{ currentFlour }} {{ elevatorStore.flours }}
         </div>
       </div>
     </div>
@@ -28,6 +28,9 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
+import { useElevatorStore } from "./stores/elevatorStore";
+
+const elevatorStore = useElevatorStore();
 
 const flours = ref([1, 2, 3, 4, 5]);
 const currentFlour = ref(1);
@@ -42,14 +45,14 @@ onMounted(() => {
   }
 });
 
- function moveElevator(newFlour, oldFlour) {
+function moveElevator(newFlour, oldFlour) {
   elevateInProgress.value = true;
   if (newFlour > oldFlour) {
     elevationPath.value = "↑ ";
-   ///
+    ///
   } else {
     elevationPath.value = "↓ ";
-   ///
+    ///
   }
   elevationPath.value = "";
   elevateInProgress.value = false;
@@ -57,7 +60,7 @@ onMounted(() => {
 
 watch(currentFlour, (newFlour, oldFlour) => {
   localStorage.setItem("currentFlour", JSON.stringify(newFlour));
-  elevateInProgress.value=true;
+  elevateInProgress.value = true;
   if (newFlour != oldFlour) {
     flourQueue.value.push({
       newFlour: newFlour,
@@ -67,7 +70,7 @@ watch(currentFlour, (newFlour, oldFlour) => {
   }
   flourQueue.value.forEach(async (elevateOrder) => {
     if (elevateOrder.status != "done") {
-    moveElevator(newFlour, oldFlour)
+      moveElevator(newFlour, oldFlour);
       elevateOrder.status = "done";
     }
   });
