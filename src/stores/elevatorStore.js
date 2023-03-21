@@ -13,6 +13,9 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   if (flourData) {
     currentFlour.value = JSON.parse(flourData);
   }
+  const moveElevator = computed(() => {
+    return `transform: translateY(${(currentFlour.value - 1) * -160}px`;
+  });
 
   return {
     flours,
@@ -21,5 +24,6 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     elevationPath,
     floursQueue,
     elevatorStatus,
+    moveElevator,
   };
 });

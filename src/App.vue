@@ -1,10 +1,10 @@
 <template>
   <main>
     <div class="elevator">
-      <div class="elevator-cabine" :class="{ shake: elevateInProgress }">
+      <div class="elevator-cabine" :style="elevatorStore.moveElevator">
         <div class="elevator-cabine-table">
           <div class="elevator-cabine-table-text"></div>
-          {{ elevationPath }} {{ currentFlour }} {{ elevatorStore.flours }}
+          {{ elevationPath }} {{ elevatorStore.currentFlour }}
         </div>
       </div>
     </div>
@@ -16,7 +16,7 @@
             :class="{
               'flour-waiting': currentFlour == flour && elevateInProgress,
             }"
-            @click="currentFlour = flour"
+            @click="elevatorStore.currentFlour = flour"
           >
             {{ flour }}
           </button>
@@ -45,35 +45,23 @@ onMounted(() => {
   }
 });
 
-function moveElevator(newFlour, oldFlour) {
-  elevateInProgress.value = true;
-  if (newFlour > oldFlour) {
-    elevationPath.value = "↑ ";
-    ///
-  } else {
-    elevationPath.value = "↓ ";
-    ///
-  }
-  elevationPath.value = "";
-  elevateInProgress.value = false;
-}
-
-watch(currentFlour, (newFlour, oldFlour) => {
+watch(elevatorStore.currentFlour, (newFlour, oldFlour) => {
   localStorage.setItem("currentFlour", JSON.stringify(newFlour));
-  elevateInProgress.value = true;
-  if (newFlour != oldFlour) {
-    flourQueue.value.push({
-      newFlour: newFlour,
-      oldFlour: oldFlour,
-      status: "inQueue",
-    });
-  }
-  flourQueue.value.forEach(async (elevateOrder) => {
-    if (elevateOrder.status != "done") {
-      moveElevator(newFlour, oldFlour);
-      elevateOrder.status = "done";
-    }
-  });
+  // elevateInProgress.value = true;
+  // if (newFlour != oldFlour) {
+  //   flourQueue.value.push({
+  //     newFlour: newFlour,
+  //     oldFlour: oldFlour,
+  //     status: "inQueue",
+  //   });
+  // }
+  // flourQueue.value.forEach(async (elevateOrder) => {
+  //   if (elevateOrder.status != "done") {
+  //     moveElevator(newFlour, oldFlour);
+  //     elevateOrder.status = "done";
+  //   }
+  // });
+  elevatorStore.moveElevator;
 });
 </script>
 <style src="./styles/reset.css"></style>
