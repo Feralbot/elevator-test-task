@@ -3,6 +3,7 @@
     <div class="elevator">
       <div
         class="elevator-cabine"
+        ref="elevatorCabine"
         :style="[elevatorStore.moveElevator, elevatorStore.smoothElevate]"
       >
         <div class="elevator-cabine-table">
@@ -27,6 +28,7 @@
             {{ flour }}
           </button>
           {{ elevatorStore.floursQueue }}
+          {{ elevatorStore.elevatorStatus }}
         </div>
       </div>
     </div>
@@ -34,17 +36,33 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useElevatorStore } from "./stores/elevatorStore";
 
 const elevatorStore = useElevatorStore();
-
+const elevatorCabine = ref();
 onMounted(() => {
   const flourData = localStorage.getItem("currentFlour");
   if (flourData) {
     elevatorStore.currentFlour = JSON.parse(flourData);
   }
 });
+
+function StartQueueElevating() {
+  elevatorCabine.value.ontransitionend = () => {
+    console.log("fsf");
+    elevatorStore.elevatorStatus = "arrived";
+  };
+}
+
+watch(
+  () => elevatorStore.elevatorStatus,
+  () => {
+    if (elevatorStore.elevatorStatus == "inProgress") {
+      StartQueueElevating();
+    }
+  }
+);
 </script>
 <style src="./styles/reset.css"></style>
 <style src="./styles/main.css"></style>
