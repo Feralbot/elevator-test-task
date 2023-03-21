@@ -22,9 +22,9 @@ npm run start
 
 ## Рабочая демка:
 
-```
+
 [https://feralbot.github.io/elevator-test-task/](https://feralbot.github.io/elevator-test-task/)
-```
+
 
 ## Мысли и комментарии к ходу решения тестового задания:
 
