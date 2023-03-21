@@ -15,11 +15,18 @@
     </div>
 
     <div class="flours">
-      <div class="flour" v-for="flour in elevatorStore.flours" :key="flour">
+      <floor
+        class="flour"
+        v-for="flour in elevatorStore.flours"
+        :key="flour"
+        :floursQueue="elevatorStore.floursQueue"
+        :flour="flour"
+      />
+      <!-- <div class="flour" v-for="flour in elevatorStore.flours" :key="flour">
         <button
           class="flour-btn"
           :class="{
-            'flour-waiting': elevatorStore.floursQueue.includes(flour),
+            'flour-btn__waiting': elevatorStore.floursQueue.includes(flour),
           }"
           @click="elevatorStore.addToQueue(flour)"
         >
@@ -27,7 +34,7 @@
         </button>
         {{ elevatorStore.floursQueue }}
         {{ elevatorStore.elevatorStatus }}
-      </div>
+      </div> -->
     </div>
   </main>
 </template>
@@ -35,6 +42,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { useElevatorStore } from "./stores/elevatorStore";
+import floor from "./components/floor.vue";
 
 const elevatorStore = useElevatorStore();
 const elevatorCabine = ref();

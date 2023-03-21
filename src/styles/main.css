@@ -45,7 +45,7 @@ main {
   height: 160px;
   border-bottom: 1px solid black;
 }
-.flour-waiting {
+.flour-btn__waiting {
   background-color: rgb(238, 204, 83);
 }
 button {
