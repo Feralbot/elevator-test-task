@@ -4,7 +4,7 @@ import { ref, computed, watch } from "vue";
 export const useElevatorStore = defineStore("elevatorStore", () => {
   const floors = ref([1, 2, 3, 4, 5]);
   const currentFloor = ref(1);
-  const elevatorSpeed = ref(1);
+  const elevatorSpeed = ref("");
   const elevationPath = ref("");
   const floorsQueue = ref([]);
   const elevatorStatus = ref("rest");
@@ -34,6 +34,9 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   const ChangeStatus = () => {
     elevatorStatus.value = "inProgress";
   };
+  const changeSpeed = (newFloor, oldFloor) => {
+    elevatorSpeed.value = Math.abs(newFloor - oldFloor);
+  };
 
   watch(
     floorsQueue,
@@ -46,6 +49,7 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   );
   watch(currentFloor, (newFloor, oldFloor) => {
     ChangeStatus();
+    changeSpeed(newFloor, oldFloor);
     localStorage.setItem("currentFloor", JSON.stringify(newFloor));
     if (oldFloor < newFloor) {
       elevationPath.value = "↑ ";
