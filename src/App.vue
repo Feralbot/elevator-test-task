@@ -20,10 +20,7 @@
             :class="{
               'flour-waiting': elevatorStore.currentFlour == flour,
             }"
-            @click="
-              elevatorStore.currentFlour = flour;
-              elevatorStore.addToQueue(flour);
-            "
+            @click="elevatorStore.addToQueue(flour);"
           >
             {{ flour }}
           </button>
@@ -48,7 +45,10 @@ onMounted(() => {
   }
 });
 
+
+
 function StartQueueElevating() {
+  //elevatorStore.moveElevator;
   elevatorCabine.value.ontransitionend = () => {
     console.log("fsf");
     elevatorStore.elevatorStatus = "arrived";
