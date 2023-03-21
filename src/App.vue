@@ -22,19 +22,6 @@
         :floursQueue="elevatorStore.floursQueue"
         :flour="flour"
       />
-      <!-- <div class="flour" v-for="flour in elevatorStore.flours" :key="flour">
-        <button
-          class="flour-btn"
-          :class="{
-            'flour-btn__waiting': elevatorStore.floursQueue.includes(flour),
-          }"
-          @click="elevatorStore.addToQueue(flour)"
-        >
-          {{ flour }}
-        </button>
-        {{ elevatorStore.floursQueue }}
-        {{ elevatorStore.elevatorStatus }}
-      </div> -->
     </div>
   </main>
 </template>
@@ -56,6 +43,7 @@ onMounted(() => {
 function StartQueueElevating() {
   elevatorCabine.value.ontransitionend = () => {
     elevatorStore.elevatorStatus = "arrived";
+    elevatorStore.elevationPath = "";
     setTimeout(() => {
       elevatorStore.elevatorStatus = "rest";
       elevatorStore.elevateDelivered();
