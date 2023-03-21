@@ -52,6 +52,13 @@ function StartQueueElevating() {
   elevatorCabine.value.ontransitionend = () => {
     console.log("fsf");
     elevatorStore.elevatorStatus = "arrived";
+    setTimeout(() => {
+      elevatorStore.elevatorStatus = "rest";
+      elevatorStore.elevateDelivered();
+      if (elevatorStore.floursQueue.length != 0) {
+        StartQueueElevating();
+      }
+    }, 3000);
   };
 }
 
