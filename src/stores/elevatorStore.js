@@ -35,8 +35,10 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
 
   watch(
     floursQueue,
-    (newFlour, oldFlour) => {
-      currentFlour.value = floursQueue.value[0];
+    () => {
+      if (floursQueue.value[0]) {
+        currentFlour.value = floursQueue.value[0];
+      }
     },
     { deep: true }
   );

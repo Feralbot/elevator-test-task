@@ -3,6 +3,7 @@
     <div class="elevator">
       <div
         class="elevator-cabine"
+        :class="{ shake: elevatorStore.elevatorStatus == 'arrived' }"
         ref="elevatorCabine"
         :style="[elevatorStore.moveElevator, elevatorStore.smoothElevate]"
       >
@@ -20,7 +21,7 @@
             :class="{
               'flour-waiting': elevatorStore.currentFlour == flour,
             }"
-            @click="elevatorStore.addToQueue(flour);"
+            @click="elevatorStore.addToQueue(flour)"
           >
             {{ flour }}
           </button>
@@ -44,8 +45,6 @@ onMounted(() => {
     elevatorStore.currentFlour = JSON.parse(flourData);
   }
 });
-
-
 
 function StartQueueElevating() {
   //elevatorStore.moveElevator;
