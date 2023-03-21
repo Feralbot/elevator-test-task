@@ -1,7 +1,10 @@
 <template>
   <main>
     <div class="elevator">
-      <div class="elevator-cabine" :style="elevatorStore.moveElevator">
+      <div
+        class="elevator-cabine"
+        :style="[elevatorStore.moveElevator, elevatorStore.smoothElevate]"
+      >
         <div class="elevator-cabine-table">
           <div class="elevator-cabine-table-text"></div>
           {{ elevationPath }} {{ elevatorStore.currentFlour }}
@@ -45,7 +48,7 @@ onMounted(() => {
   }
 });
 
-watch(elevatorStore.currentFlour, (newFlour, oldFlour) => {
+watch(elevatorStore.currentFlour, (newFlour) => {
   localStorage.setItem("currentFlour", JSON.stringify(newFlour));
   // elevateInProgress.value = true;
   // if (newFlour != oldFlour) {
