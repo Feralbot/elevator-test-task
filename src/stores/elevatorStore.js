@@ -48,9 +48,9 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     ChangeStatus();
     localStorage.setItem("currentFlour", JSON.stringify(newFlour));
     if (oldFlour < newFlour) {
-      elevationPath.value = "UP ";
+      elevationPath.value = "↑ ";
     } else {
-      elevationPath.value = "D ";
+      elevationPath.value = "↓ ";
     }
   });
 
