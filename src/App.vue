@@ -1,21 +1,7 @@
 <template>
   <main>
-    <div class="elevator">
-      <div
-        class="elevator-cabine"
-        :class="{ blink: elevatorStatusStore.elevatorStatus == 'arrived' }"
-        ref="elevatorCabine"
-        :style="[elevatorStore.moveElevator, elevatorStore.smoothElevate]"
-      >
-        <div class="elevator-cabine-table">
-          <div class="elevator-cabine-table-text"></div>
-          {{ elevatorStore.elevationPath }} {{ elevatorStore.currentFloor }}
-        </div>
-      </div>
-    </div>
-
+    <elevatorComponent />
     <floorComponent />
-    {{ elevatorStatusStore.elevatorStatus }}
   </main>
 </template>
 
@@ -38,45 +24,12 @@
 // [ ]- Отделить презентационную логику от бизнес-логики // Через композаблы, движение и анимации в один, добавление этажей, лифтов в другой.
 // [ ]- Проследить при добавлении этажа высоту подьема лифта
 
-import { onMounted, ref, watch } from "vue";
 import { useElevatorStore } from "./stores/elevatorStore";
 import { useElevatorStatusStore } from "./stores/elevatorStatusStore";
 import floorComponent from "./components/floor.vue";
-
+import elevatorComponent from "./components/elevator.vue";
 const elevatorStore = useElevatorStore();
 const elevatorStatusStore = useElevatorStatusStore();
-const elevatorCabine = ref();
-onMounted(() => {
-  elevatorStore.getLocalStorage();
-  elevatorStore.resetAfterReloadPage();
-});
-
-function StartQueueElevating() {
-  elevatorCabine.value.ontransitionend = () => {
-    elevatorStatusStore.setArrived();
-    elevatorStore.elevationPath = "";
-    setTimeout(() => {
-      elevatorStatusStore.setRest();
-      elevatorStore.elevateDelivered();
-      if (elevatorStore.floorsQueue.length != 0) {
-        StartQueueElevating();
-      }
-    }, 3000);
-  };
-}
-
-watch(
-  () => elevatorStatusStore.elevatorStatus,
-  () => {
-    // console.log(
-    //   "elevator Status changed to " + elevatorStatusStore.elevatorStatus
-    // );
-    if (elevatorStatusStore.elevatorStatus == "inProgress") {
-      StartQueueElevating();
-    }
-  },
-  { deep: true }
-);
 </script>
 <style src="./styles/reset.css"></style>
 <style src="./styles/main.css"></style>

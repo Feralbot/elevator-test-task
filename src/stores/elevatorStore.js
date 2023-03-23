@@ -46,11 +46,13 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     elevatorSpeed.value = Math.abs(newFloor - oldFloor);
   };
   const resetAfterReloadPage = () => {
-    elevationPath.value = "";
-    setTimeout(() => {
-      elevatorStatusStore.setArrived();
-      elevateDelivered();
-    }, 1);
+    if (floorsQueue.value[0]) {
+      elevationPath.value = "";
+      setTimeout(() => {
+        elevatorStatusStore.setArrived();
+        elevateDelivered();
+      }, 1);
+    }
   };
 
   watch(
