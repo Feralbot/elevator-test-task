@@ -15,6 +15,7 @@
     </div>
 
     <floorComponent />
+    {{ elevatorStore.elevatorStatus }}
   </main>
 </template>
 
@@ -27,7 +28,7 @@
 // [ ]- Хранение информации о позиционировании и анимации лифта в модуле состояния  //  перенести
 // [!!]- Трудночитаемая история коммитов (дублирования, не совсем понятные месседжи) // Коммитить важные вещи, конкретнее описывать коммиты
 // [ ]- Неочевидная смена статусов (разные статусы выставляются в компоненте и модуле состояния, некоторые напрямую, некоторые через функцию) // Поместить  в одно место
-// [ ]- Не сохраняется очередь этажей при перезагрузке страницы // добавить в LocalStorage
+// [?]- Не сохраняется очередь этажей при перезагрузке страницы // Добавил, но 2-3 секунды висит статус inProgress при перезагрузке страницы. В идеале узнать почему.
 
 // [X]- Четче разграничить ответственность между компонентами и store // убрать пропсы, брать данные из стора
 // [ ]- Четче разграничить ответственность в рамках компонентов (определить "умные" и "глупые") // пока ? Точно выделить лифт в компонент,
@@ -41,10 +42,8 @@ import floorComponent from "./components/floor.vue";
 const elevatorStore = useElevatorStore();
 const elevatorCabine = ref();
 onMounted(() => {
-  const floorData = localStorage.getItem("currentFloor");
-  if (floorData) {
-    elevatorStore.currentFloor = JSON.parse(floorData);
-  }
+  elevatorStore.getLocalStorage();
+  elevatorStore.resetAfterReloadPage();
 });
 
 function StartQueueElevating() {

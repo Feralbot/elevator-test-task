@@ -9,17 +9,27 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   const floorsQueue = ref([]);
   const elevatorStatus = ref("rest");
 
-  const floorData = localStorage.getItem("currentFloor");
-  if (floorData) {
-    currentFloor.value = JSON.parse(floorData);
-  }
-
   const moveElevator = computed(() => {
     return `transform: translateY(${(currentFloor.value - 1) * -160}px`;
   });
   const smoothElevate = computed(() => {
     return `transition: transform ${elevatorSpeed.value}s`;
   });
+
+  const setLocalStorage = () => {
+    localStorage.setItem("currentFloor", JSON.stringify(currentFloor.value));
+    localStorage.setItem("floorsQueue", JSON.stringify(floorsQueue.value));
+  };
+  const getLocalStorage = () => {
+    const floorData = localStorage.getItem("currentFloor");
+    if (floorData) {
+      currentFloor.value = JSON.parse(floorData);
+    }
+    const queueData = localStorage.getItem("floorsQueue");
+    if (queueData) {
+      floorsQueue.value = JSON.parse(queueData);
+    }
+  };
 
   const addToQueue = (floor) => {
     if (!floorsQueue.value.includes(floor) && currentFloor.value != floor) {
@@ -37,10 +47,19 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   const changeSpeed = (newFloor, oldFloor) => {
     elevatorSpeed.value = Math.abs(newFloor - oldFloor);
   };
+  const resetAfterReloadPage = () => {
+    elevatorStatus.value = "arrived";
+    elevationPath.value = "";
+    setTimeout(() => {
+      elevatorStatus.value = "rest";
+      elevateDelivered();
+    }, 3000);
+  };
 
   watch(
     floorsQueue,
     () => {
+      setLocalStorage();
       if (floorsQueue.value[0]) {
         currentFloor.value = floorsQueue.value[0];
       }
@@ -50,7 +69,7 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   watch(currentFloor, (newFloor, oldFloor) => {
     ChangeStatus();
     changeSpeed(newFloor, oldFloor);
-    localStorage.setItem("currentFloor", JSON.stringify(newFloor));
+
     if (oldFloor < newFloor) {
       elevationPath.value = "↑ ";
     } else {
@@ -70,5 +89,8 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     addToQueue,
     ChangeStatus,
     elevateDelivered,
+    getLocalStorage,
+    setLocalStorage,
+    resetAfterReloadPage,
   };
 });
