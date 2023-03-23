@@ -1,13 +1,14 @@
 import { defineStore } from "pinia";
+import { useElevatorStatusStore } from "./elevatorStatusStore";
 import { ref, computed, watch } from "vue";
 
 export const useElevatorStore = defineStore("elevatorStore", () => {
+  const elevatorStatusStore = useElevatorStatusStore();
   const floors = ref([1, 2, 3, 4, 5]);
   const currentFloor = ref(1);
   const elevatorSpeed = ref("");
   const elevationPath = ref("");
   const floorsQueue = ref([]);
-  const elevatorStatus = ref("rest");
 
   const moveElevator = computed(() => {
     return `transform: translateY(${(currentFloor.value - 1) * -160}px`;
@@ -41,19 +42,15 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     floorsQueue.value.shift();
   };
 
-  const ChangeStatus = () => {
-    elevatorStatus.value = "inProgress";
-  };
   const changeSpeed = (newFloor, oldFloor) => {
     elevatorSpeed.value = Math.abs(newFloor - oldFloor);
   };
   const resetAfterReloadPage = () => {
-    elevatorStatus.value = "arrived";
     elevationPath.value = "";
     setTimeout(() => {
-      elevatorStatus.value = "rest";
+      elevatorStatusStore.setArrived();
       elevateDelivered();
-    }, 3000);
+    }, 1);
   };
 
   watch(
@@ -67,9 +64,8 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     { deep: true }
   );
   watch(currentFloor, (newFloor, oldFloor) => {
-    ChangeStatus();
     changeSpeed(newFloor, oldFloor);
-
+    elevatorStatusStore.setInProgress();
     if (oldFloor < newFloor) {
       elevationPath.value = "↑ ";
     } else {
@@ -83,11 +79,9 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     elevatorSpeed,
     elevationPath,
     floorsQueue,
-    elevatorStatus,
     moveElevator,
     smoothElevate,
     addToQueue,
-    ChangeStatus,
     elevateDelivered,
     getLocalStorage,
     setLocalStorage,

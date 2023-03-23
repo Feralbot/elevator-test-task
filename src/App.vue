@@ -3,7 +3,7 @@
     <div class="elevator">
       <div
         class="elevator-cabine"
-        :class="{ blink: elevatorStore.elevatorStatus == 'arrived' }"
+        :class="{ blink: elevatorStatusStore.elevatorStatus == 'arrived' }"
         ref="elevatorCabine"
         :style="[elevatorStore.moveElevator, elevatorStore.smoothElevate]"
       >
@@ -15,7 +15,7 @@
     </div>
 
     <floorComponent />
-    {{ elevatorStore.elevatorStatus }}
+    {{ elevatorStatusStore.elevatorStatus }}
   </main>
 </template>
 
@@ -27,8 +27,11 @@
 
 // [ ]- Хранение информации о позиционировании и анимации лифта в модуле состояния  //  перенести
 // [!!]- Трудночитаемая история коммитов (дублирования, не совсем понятные месседжи) // Коммитить важные вещи, конкретнее описывать коммиты
-// [ ]- Неочевидная смена статусов (разные статусы выставляются в компоненте и модуле состояния, некоторые напрямую, некоторые через функцию) // Поместить  в одно место
-// [?]- Не сохраняется очередь этажей при перезагрузке страницы // Добавил, но 2-3 секунды висит статус inProgress при перезагрузке страницы. В идеале узнать почему.
+// [Х?]- Неочевидная смена статусов (разные статусы выставляются в компоненте и модуле состояния, некоторые напрямую, некоторые через функцию)
+//       //Вынес состояния лифта в отдельный стор, стало чуть лучше, но не идеально, по сути, они также задаются через разные функции в разных компонентах.
+// [X?]- Не сохраняется очередь этажей при перезагрузке страницы // Пофиксил, но костыльно, через SetTimeout ({..},1).
+//       Состояние inProgress сохраняется при перезагрузке страницы, из за watcher'а на currentFloor.
+//       Пробовал разные варианты, выбраный оказался лучшим на текущий момент.
 
 // [X]- Четче разграничить ответственность между компонентами и store // убрать пропсы, брать данные из стора
 // [ ]- Четче разграничить ответственность в рамках компонентов (определить "умные" и "глупые") // пока ? Точно выделить лифт в компонент,
@@ -37,9 +40,11 @@
 
 import { onMounted, ref, watch } from "vue";
 import { useElevatorStore } from "./stores/elevatorStore";
+import { useElevatorStatusStore } from "./stores/elevatorStatusStore";
 import floorComponent from "./components/floor.vue";
 
 const elevatorStore = useElevatorStore();
+const elevatorStatusStore = useElevatorStatusStore();
 const elevatorCabine = ref();
 onMounted(() => {
   elevatorStore.getLocalStorage();
@@ -48,10 +53,10 @@ onMounted(() => {
 
 function StartQueueElevating() {
   elevatorCabine.value.ontransitionend = () => {
-    elevatorStore.elevatorStatus = "arrived";
+    elevatorStatusStore.setArrived();
     elevatorStore.elevationPath = "";
     setTimeout(() => {
-      elevatorStore.elevatorStatus = "rest";
+      elevatorStatusStore.setRest();
       elevatorStore.elevateDelivered();
       if (elevatorStore.floorsQueue.length != 0) {
         StartQueueElevating();
@@ -61,12 +66,16 @@ function StartQueueElevating() {
 }
 
 watch(
-  () => elevatorStore.elevatorStatus,
+  () => elevatorStatusStore.elevatorStatus,
   () => {
-    if (elevatorStore.elevatorStatus == "inProgress") {
+    // console.log(
+    //   "elevator Status changed to " + elevatorStatusStore.elevatorStatus
+    // );
+    if (elevatorStatusStore.elevatorStatus == "inProgress") {
       StartQueueElevating();
     }
-  }
+  },
+  { deep: true }
 );
 </script>
 <style src="./styles/reset.css"></style>
