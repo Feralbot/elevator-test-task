@@ -4,7 +4,7 @@ import { ref, computed, watch } from "vue";
 
 export const useElevatorStore = defineStore("elevatorStore", () => {
   const elevatorStatusStore = useElevatorStatusStore();
-  const floors = ref([1, 2, 3, 4, 5]);
+  const floors = ref(6);
   const currentFloor = ref(1);
   const elevatorSpeed = ref("");
   const elevationPath = ref("");
@@ -17,11 +17,11 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     return `transition: transform ${elevatorSpeed.value}s`;
   });
 
-  const setLocalStorage = () => {
+  const setElevatorInfoToLocalStorage = () => {
     localStorage.setItem("currentFloor", JSON.stringify(currentFloor.value));
     localStorage.setItem("floorsQueue", JSON.stringify(floorsQueue.value));
   };
-  const getLocalStorage = () => {
+  const getElevatorInfoToLocalStorage = () => {
     const floorData = localStorage.getItem("currentFloor");
     if (floorData) {
       currentFloor.value = JSON.parse(floorData);
@@ -41,13 +41,12 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   const elevateDelivered = () => {
     floorsQueue.value.shift();
   };
-
   const changeSpeed = (newFloor, oldFloor) => {
     elevatorSpeed.value = Math.abs(newFloor - oldFloor);
   };
   const resetAfterReloadPage = () => {
+    elevationPath.value = "";
     if (floorsQueue.value[0]) {
-      elevationPath.value = "";
       setTimeout(() => {
         elevatorStatusStore.setArrived();
         elevateDelivered();
@@ -58,7 +57,7 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   watch(
     floorsQueue,
     () => {
-      setLocalStorage();
+      setElevatorInfoToLocalStorage();
       if (floorsQueue.value[0]) {
         currentFloor.value = floorsQueue.value[0];
       }
@@ -85,8 +84,8 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     smoothElevate,
     addToQueue,
     elevateDelivered,
-    getLocalStorage,
-    setLocalStorage,
+    setElevatorInfoToLocalStorage,
+    getElevatorInfoToLocalStorage,
     resetAfterReloadPage,
   };
 });

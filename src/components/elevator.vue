@@ -23,7 +23,7 @@ const elevatorStatusStore = useElevatorStatusStore();
 
 const elevatorCabine = ref();
 onMounted(() => {
-  elevatorStore.getLocalStorage();
+  elevatorStore.getElevatorInfoToLocalStorage();
   elevatorStore.resetAfterReloadPage();
 });
 

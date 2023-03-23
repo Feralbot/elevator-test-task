@@ -1,7 +1,16 @@
 <template>
   <main>
-    <elevatorComponent />
+    <elevatorComponent
+      v-for="elevator in scaleStore.elevators"
+      :key="elevator"
+    />
     <floorComponent />
+    <div class="commandPannel">
+      <button @click="scaleStore.increaseFloor">Добавить этаж</button>
+      <button @click="scaleStore.decreaseFloor">убрать этаж</button>
+      <button @click="scaleStore.increaseElevators">Добавить лифт</button>
+      <button @click="scaleStore.decreaseElevators">убрать лифт</button>
+    </div>
   </main>
 </template>
 
@@ -23,13 +32,22 @@
 // [ ]- Четче разграничить ответственность в рамках компонентов (определить "умные" и "глупые") // пока ? Точно выделить лифт в компонент,
 // [ ]- Отделить презентационную логику от бизнес-логики // Через композаблы, движение и анимации в один, добавление этажей, лифтов в другой.
 // [ ]- Проследить при добавлении этажа высоту подьема лифта
-
+// [ ]- Убрать панель с кнопками в компонент
+// [ ]- Добавить в LocalStorage Сколько этажей и лифтов, иначе будет странно.
+import { onMounted } from "vue";
 import { useElevatorStore } from "./stores/elevatorStore";
 import { useElevatorStatusStore } from "./stores/elevatorStatusStore";
+import { useScaleStore } from "./stores/scaleStore";
+
 import floorComponent from "./components/floor.vue";
 import elevatorComponent from "./components/elevator.vue";
+
 const elevatorStore = useElevatorStore();
 const elevatorStatusStore = useElevatorStatusStore();
+const scaleStore = useScaleStore();
+onMounted(() => {
+  scaleStore.getScalingDataFromLocalStorage();
+});
 </script>
 <style src="./styles/reset.css"></style>
 <style src="./styles/main.css"></style>

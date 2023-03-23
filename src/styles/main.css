@@ -56,3 +56,9 @@ button {
 hr {
   margin: 0;
 }
+.commandPannel {
+  background-color: tan;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
