@@ -5,7 +5,16 @@ import { useElevatorStore } from "./elevatorStore";
 export const useScaleStore = defineStore("scaleStore", () => {
   const elevatorStore = useElevatorStore();
   const floors = ref(5);
-  const elevators = ref([elevatorStore.elevator]);
+  const elevators = ref([
+    {
+      id: 1,
+      position: 1,
+      destination: 1,
+      speed: 0,
+      status: "rest",
+      direction: "",
+    },
+  ]);
 
   const increaseFloor = () => {
     floors.value++;
@@ -15,21 +24,31 @@ export const useScaleStore = defineStore("scaleStore", () => {
       floors.value--;
     }
   };
+  const setID = () => {
+    return elevators.value.length + 1;
+  };
   const increaseElevators = () => {
-    elevators.value++;
+    elevators.value.push({
+      id: setID(),
+      position: 1,
+      destination: 1,
+      speed: 0,
+      status: "rest",
+      direction: "",
+    });
   };
   const decreaseElevators = () => {
-    if (elevators.value > 1) {
-      elevators.value--;
+    if (elevators.value.length > 1) {
+      elevators.value.splice(-1);
     }
   };
   const setScalingDatatoLocalStorage = () => {
-    localStorage.setItem("ElevatorsAmmount", JSON.stringify(elevators.value));
+    localStorage.setItem("ElevatorsInfo", JSON.stringify(elevators.value));
     localStorage.setItem("FloorsAmmount", JSON.stringify(floors.value));
   };
 
   const getScalingDataFromLocalStorage = () => {
-    const elevatorsData = localStorage.getItem("ElevatorsAmmount");
+    const elevatorsData = localStorage.getItem("ElevatorsInfo");
     if (elevatorsData) {
       elevators.value = JSON.parse(elevatorsData);
     }
@@ -41,9 +60,13 @@ export const useScaleStore = defineStore("scaleStore", () => {
   watch(floors, () => {
     setScalingDatatoLocalStorage();
   });
-  watch(elevators, () => {
-    setScalingDatatoLocalStorage();
-  });
+  watch(
+    elevators,
+    () => {
+      setScalingDatatoLocalStorage();
+    },
+    { deep: true }
+  );
   return {
     floors,
     increaseFloor,
@@ -53,5 +76,6 @@ export const useScaleStore = defineStore("scaleStore", () => {
     decreaseElevators,
     setScalingDatatoLocalStorage,
     getScalingDataFromLocalStorage,
+    setID,
   };
 });

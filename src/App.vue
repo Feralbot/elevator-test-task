@@ -12,18 +12,12 @@
         v-for="elevator in scaleStore.elevators"
         :key="elevator"
       >
-        <div class="id">ID: {{ elevatorStore.elevator.id }}</div>
-        <div class="position">
-          position: {{ elevatorStore.elevator.position }}
-        </div>
-        <div class="destination">
-          destination: {{ elevatorStore.elevator.destination }}
-        </div>
-        <div class="speed">speed: {{ elevatorStore.elevator.speed }}</div>
-        <div class="status">status: {{ elevatorStore.elevator.status }}</div>
-        <div class="direction">
-          direction: {{ elevatorStore.elevator.direction }}
-        </div>
+        <div class="id">ID: {{ elevator.id }}</div>
+        <div class="position">position: {{ elevator.position }}</div>
+        <div class="destination">destination: {{ elevator.destination }}</div>
+        <div class="speed">speed: {{ elevator.speed }}</div>
+        <div class="status">status: {{ elevator.status }}</div>
+        <div class="direction">direction: {{ elevator.direction }}</div>
       </div>
     </div>
   </main>

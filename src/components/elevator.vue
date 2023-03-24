@@ -1,19 +1,22 @@
 <template>
-  <div class="elevator">
+  <div
+    class="elevator"
+    v-for="elevator in scaleStore.elevators"
+    :key="elevator"
+  >
     <div
       class="elevator-cabine"
-      :id="elevatorStore.elevator.id"
-      :class="{ blink: elevatorStore.elevator.status == 'arrived' }"
-      ref="elevatorCabine"
+      :id="elevator.id"
+      :class="{ blink: elevator.status == 'arrived' }"
       :style="[
-        elevatorStore.moveElevator(elevatorStore.elevator),
-        elevatorStore.smoothElevate(elevatorStore.elevator),
+        elevatorStore.moveElevator(elevator),
+        elevatorStore.smoothElevate(elevator),
       ]"
     >
       <div class="elevator-cabine-table">
         <div class="elevator-cabine-table-text"></div>
-        {{ elevatorStore.elevator.direction }}
-        {{ elevatorStore.elevator.position }}
+        {{ elevator.direction }}
+        {{ elevator.position }}
       </div>
     </div>
   </div>
@@ -21,9 +24,9 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { useElevatorStore } from "../stores/elevatorStore";
-
+import { useScaleStore } from "../stores/scaleStore";
 const elevatorStore = useElevatorStore();
-
+const scaleStore = useScaleStore();
 onMounted(() => {
   elevatorStore.resetAfterReloadPage();
 });
