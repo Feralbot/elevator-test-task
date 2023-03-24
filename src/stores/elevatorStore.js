@@ -14,8 +14,10 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   const smoothElevate = (elevator) => {
     return `transition: transform ${elevator.speed}s`;
   };
-  const changeDestination = (elevator) => {
-    return (elevator.destination = liftingSystemLogic.floorsQueue[0]);
+  const changeDestination = (elevator, queue) => {
+    if (liftingSystemLogic.floorsQueue[0]) {
+      return (elevator.destination = queue);
+    } else return (elevator.destination = elevator.position);
   };
   const changeSpeed = (elevator) => {
     return (elevator.speed = Math.abs(
@@ -33,7 +35,7 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     }
   };
   const changePosition = (elevator) => {
-    elevator.position = liftingSystemLogic.floorsQueue[0];
+    elevator.position = elevator.destination;
   };
   const setRest = (elevator) => {
     return (elevator.status = "rest");
@@ -47,41 +49,37 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   //
   //
 
-  const startQueue = (elevator) => {
-    if (elevator.status == "rest") {
-      changeDestination(elevator);
-      changeSpeed(elevator);
+  const startQueue = (elevator, queue) => {
+    changeDestination(elevator, queue);
+    changeSpeed(elevator);
+    changeDirection(elevator);
+    // moveElevator(elevator);
+    // smoothElevate(elevator);
+    // elevator.status = "inProgress";
+    setInProgress(elevator);
+    //
+    document.getElementById(elevator.id).ontransitionend = () => {
+      changePosition(elevator);
+      setArrived(elevator);
       changeDirection(elevator);
-      moveElevator(elevator);
-      smoothElevate(elevator);
-      setInProgress(elevator);
-      document.getElementById(elevator.id).ontransitionend = () => {
+      setTimeout(() => {
+        setRest(elevator);
         liftingSystemLogic.elevateDelivered();
-        changePosition(elevator);
-        changeDirection(elevator);
-        setArrived(elevator);
-        setTimeout(() => {
-          setRest(elevator);
-
-          if (liftingSystemLogic.floorsQueue.length) {
-            startQueue(elevator);
-          }
-        }, 3000);
-      };
-    }
+      }, 3000);
+    };
   };
 
   const resetAfterReloadPage = () => {
-    liftingSystemLogic.getQueueFromLocalStorage();
-    scaleStore.elevators.forEach((elevator) => {
-      elevator.destination = elevator.position;
-      moveElevator(elevator);
-      if (liftingSystemLogic.floorsQueue[0]) {
-        setTimeout(() => {
-          startQueue(elevator);
-        }, 1);
-      }
-    });
+    // liftingSystemLogic.getQueueFromLocalStorage();
+    // scaleStore.elevators.forEach((elevator) => {
+    //   elevator.destination = elevator.position;
+    //   moveElevator(elevator);
+    //   if (liftingSystemLogic.floorsQueue[0]) {
+    //     setTimeout(() => {
+    //       startQueue(elevator);
+    //     }, 1);
+    //   }
+    // });
   };
 
   return {

@@ -19,30 +19,60 @@ export const useLiftingSystemLogicStore = defineStore(
       }
     };
     const addToQueue = (floor) => {
-      if (!floorsQueue.value.includes(floor)) {
-        floorsQueue.value.push(floor);
-      }
+      floorsQueue.value.push(floor);
     };
 
     const elevateDelivered = () => {
       floorsQueue.value.shift();
     };
 
-    const selectRestingElevator = () => {
-      let restingElevator;
-      scaleStore.elevators.forEach((elevator) => {
-        if (elevator.status == "rest") {
-          restingElevator = elevator;
-        }
-      });
-      return restingElevator;
-    };
-
     watch(
       floorsQueue.value,
-      () => {
-        elevatorStore.startQueue(selectRestingElevator());
-        setQueueToLocalStorage();
+      (newValue, oldvalue) => {
+        //console.log(newValue, oldvalue);
+        //  console.log(floorsQueue.value[floorsQueue.value.length - 1]);
+        //  console.log(newValue[newValue.length - 1]);
+        // console.log(scaleStore.elevators[e]);
+        // for (let e = 0; e < scaleStore.elevators.length; e++) {
+
+        for (let q = 0; q < floorsQueue.value.length; q++) {
+          let e = q;
+          //console.log(floorsQueue.value[q]);
+          if (e < scaleStore.elevators.length) {
+            if (scaleStore.elevators[e].status != "InProgress")
+              elevatorStore.startQueue(
+                scaleStore.elevators[e],
+                floorsQueue.value[q]
+              );
+            e++;
+          }
+          //   console.log(
+          //     "лифт " +
+          //       scaleStore.elevators[e].id +
+          //       " Отправился выполнять запрос на " +
+          //       floorsQueue.value[q] +
+          //       " этаж"
+          //   );
+          // }
+        }
+
+        // scaleStore.elevators.forEach((e) => {
+        //   if (e.status != "inProgress") {
+        //     floorsQueue.value.forEach((queue) => {
+        //       e.destination = queue + 1;
+
+        //       elevatorStore.startQueue(scaleStore.elevators[e.id - 1]);
+        //     });
+        //   }
+        // });
+
+        // floorsQueue.value.forEach((e) => {
+        //   elevatorStore.startQueue(e.elevator);
+        // });
+
+        // elevatorStore.startQueue(selectRestingElevator());
+        // elevateDelivered();
+        // setQueueToLocalStorage();
       },
       { deep: true }
     );
@@ -53,7 +83,6 @@ export const useLiftingSystemLogicStore = defineStore(
       getQueueFromLocalStorage,
       elevateDelivered,
       addToQueue,
-      selectRestingElevator,
     };
   }
 );

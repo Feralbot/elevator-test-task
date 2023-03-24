@@ -19,6 +19,10 @@
         <div class="status">status: {{ elevator.status }}</div>
         <div class="direction">direction: {{ elevator.direction }}</div>
       </div>
+      QUEUE {{ liftingSystemLogic.floorsQueue }}
+      <button @click="elevatorStore.startQueue(scaleStore.elevators[0])">
+        12312
+      </button>
     </div>
   </main>
 </template>
@@ -49,9 +53,11 @@ import { useScaleStore } from "./stores/scaleStore";
 
 import floorComponent from "./components/floor.vue";
 import elevatorComponent from "./components/elevator.vue";
+import { useLiftingSystemLogicStore } from "./stores/liftingSystemLogicStore";
 
 const elevatorStore = useElevatorStore();
 const scaleStore = useScaleStore();
+const liftingSystemLogic = useLiftingSystemLogicStore();
 onMounted(() => {
   scaleStore.getScalingDataFromLocalStorage();
 });

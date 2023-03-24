@@ -2,7 +2,7 @@
   <div
     class="elevator"
     v-for="elevator in scaleStore.elevators"
-    :key="elevator"
+    :key="elevator.id"
   >
     <div
       class="elevator-cabine"

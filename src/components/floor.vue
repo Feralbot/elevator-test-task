@@ -1,13 +1,7 @@
 <template>
   <div class="floors">
     <div class="floor" v-for="floor in scaleStore.floors" :key="floor">
-      <button
-        class="floor-btn"
-        :class="{
-          'floor-btn__waiting': liftingSystemLogic.floorsQueue.includes(floor),
-        }"
-        @click="liftingSystemLogic.addToQueue(floor)"
-      >
+      <button class="floor-btn" @click="liftingSystemLogic.addToQueue(floor)">
         {{ floor }}
       </button>
     </div>

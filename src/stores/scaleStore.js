@@ -58,12 +58,12 @@ export const useScaleStore = defineStore("scaleStore", () => {
     }
   };
   watch(floors, () => {
-    setScalingDatatoLocalStorage();
+    //setScalingDatatoLocalStorage();
   });
   watch(
     elevators,
     () => {
-      setScalingDatatoLocalStorage();
+      //  setScalingDatatoLocalStorage();
     },
     { deep: true }
   );
