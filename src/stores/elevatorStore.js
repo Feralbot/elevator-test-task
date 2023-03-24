@@ -8,20 +8,20 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     destination: 1,
     speed: 0,
     status: "rest",
-    direction: null,
+    direction: "",
   });
 
-  const currentFloor = ref(1);
   const floorsQueue = ref([]);
 
   const setElevatorInfoToLocalStorage = () => {
-    localStorage.setItem("currentFloor", JSON.stringify(currentFloor.value));
+    localStorage.setItem("elevatorStats", JSON.stringify(elevator.position));
     localStorage.setItem("floorsQueue", JSON.stringify(floorsQueue.value));
   };
   const getElevatorInfoToLocalStorage = () => {
-    const floorData = localStorage.getItem("currentFloor");
-    if (floorData) {
-      currentFloor.value = JSON.parse(floorData);
+    const elevatorData = localStorage.getItem("elevatorStats");
+    if (elevatorData) {
+      elevator.position = JSON.parse(elevatorData);
+      console.log(elevator.value);
     }
     const queueData = localStorage.getItem("floorsQueue");
     if (queueData) {
@@ -32,8 +32,8 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   const addToQueue = (floor) => {
     if (!floorsQueue.value.includes(floor)) {
       floorsQueue.value.push(floor);
-      // currentFloor.value = floorsQueue.value[0];
     }
+    startQueue(elevator);
   };
 
   const elevateDelivered = () => {
@@ -58,12 +58,18 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
       elevator.destination - elevator.position
     ));
   };
-  const changeDirection = (newFloor, oldFloor, elevator) => {
-    if (oldFloor < newFloor) {
+  const changeDirection = (elevator) => {
+    if (elevator.position < elevator.destination) {
       elevator.direction = "↑ ";
     } else {
       elevator.direction = "↓ ";
     }
+    if (elevator.position == elevator.destination) {
+      elevator.direction = "";
+    }
+  };
+  const changePosition = (elevator) => {
+    elevator.position = floorsQueue.value[0];
   };
   const setRest = (elevator) => {
     return (elevator.status = "rest");
@@ -76,36 +82,38 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   };
   //
   //
-  //
-  //
-  //
+
   const startQueue = (elevator) => {
-    changeDestination(elevator);
-    changeSpeed(elevator);
-    moveElevator(elevator);
-    smoothElevate(elevator);
-    setInProgress(elevator);
-    document.getElementById(elevator.id).ontransitionend = () => {
-      console.log("Вы приехали");
-    };
-
-    // elevatorStatusStore.setArrived();
-
-    setTimeout(() => {
-      // elevatorStatusStore.setRest();
-      elevateDelivered();
-      if (floorsQueue.length != 0) {
-        //StartQueueElevating();
-      }
-    }, 3000);
+    if (elevator.status == "rest") {
+      changeDestination(elevator);
+      changeSpeed(elevator);
+      changeDirection(elevator);
+      moveElevator(elevator);
+      smoothElevate(elevator);
+      setInProgress(elevator);
+      document.getElementById(elevator.id).ontransitionend = () => {
+        changePosition(elevator);
+        changeDirection(elevator);
+        setArrived(elevator);
+        setTimeout(() => {
+          setRest(elevator);
+          elevateDelivered();
+          if (floorsQueue.value.length) {
+            startQueue(elevator);
+          }
+        }, 3000);
+      };
+    }
   };
+  //
 
   const resetAfterReloadPage = () => {
-    //elevationPath.value = "";
+    getElevatorInfoToLocalStorage();
+    elevator.destination = elevator.position;
+    moveElevator(elevator);
     if (floorsQueue.value[0]) {
       setTimeout(() => {
-        //  elevatorStatusStore.setArrived();
-        elevateDelivered();
+        startQueue(elevator);
       }, 1);
     }
   };
@@ -113,22 +121,12 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   watch(
     floorsQueue,
     () => {
-      startQueue(elevator);
       setElevatorInfoToLocalStorage();
-      if (floorsQueue.value[0]) {
-        currentFloor.value = floorsQueue.value[0];
-      }
     },
     { deep: true }
   );
-  watch(currentFloor, (newFloor, oldFloor) => {
-    changeSpeed(elevator);
-    //elevatorStatusStore.setInProgress();
-    changeDirection(newFloor, oldFloor, elevator);
-  });
 
   return {
-    currentFloor,
     floorsQueue,
     moveElevator,
     smoothElevate,
@@ -143,5 +141,6 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     setArrived,
     startQueue,
     changeDestination,
+    changePosition,
   };
 });

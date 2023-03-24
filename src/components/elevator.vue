@@ -12,12 +12,9 @@
     >
       <div class="elevator-cabine-table">
         <div class="elevator-cabine-table-text"></div>
-        {{ elevatorStore.elevationPath }} {{ elevatorStore.currentFloor }}
+        {{ elevatorStore.elevator.direction }}
+        {{ elevatorStore.elevator.position }}
       </div>
-      <div>ID {{ elevatorStore.elevator.id }}</div>
-      <div>pos {{ elevatorStore.elevator.position }}</div>
-      <div>status {{ elevatorStore.elevator.status }}</div>
-      <div>speed {{ elevatorStore.elevator.speed }}</div>
     </div>
   </div>
 </template>
@@ -28,34 +25,6 @@ import { useElevatorStore } from "../stores/elevatorStore";
 const elevatorStore = useElevatorStore();
 
 onMounted(() => {
-  elevatorStore.getElevatorInfoToLocalStorage();
   elevatorStore.resetAfterReloadPage();
 });
-
-// function StartQueueElevating() {
-//   elevatorCabine.value.ontransitionend = () => {
-//     // elevatorStatusStore.setArrived();
-//     elevatorStore.elevationPath = "";
-//     setTimeout(() => {
-//       // elevatorStatusStore.setRest();
-//       elevatorStore.elevateDelivered();
-//       if (elevatorStore.floorsQueue.length != 0) {
-//         StartQueueElevating();
-//       }
-//     }, 3000);
-//   };
-// }
-
-// watch(
-//   () => elevatorStore.elevator.status,
-//   () => {
-//     // console.log(
-//     //   "elevator Status changed to " + elevatorStatusStore.elevatorStatus
-//     // );
-//     if (elevatorStore.elevator.status == "inProgress") {
-//       StartQueueElevating();
-//     }
-//   },
-//   { deep: true }
-// );
 </script>
