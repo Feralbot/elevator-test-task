@@ -54,7 +54,7 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     changeDestination(elevator, queue);
     changeSpeed(elevator);
     changeDirection(elevator);
-     setInProgress(elevator);
+    setInProgress(elevator);
     //
     document.getElementById(elevator.id).ontransitionend = () => {
       changePosition(elevator);
@@ -62,7 +62,7 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
       changeDirection(elevator);
       setTimeout(() => {
         setRest(elevator);
-        liftingSystemLogic.elevateDelivered();
+        liftingSystemLogic.elevateDelivered(queue);
       }, 3000);
     };
   };

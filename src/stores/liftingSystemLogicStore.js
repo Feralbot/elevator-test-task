@@ -24,57 +24,34 @@ export const useLiftingSystemLogicStore = defineStore(
       }
     };
 
-    const elevateDelivered = () => {
-      floorsQueue.value.shift();
+    const elevateDelivered = (queue) => {
+      const executedQueue = floorsQueue.value.indexOf(queue);
+      floorsQueue.value.splice(executedQueue, 1);
     };
 
     watch(
       floorsQueue.value,
       () => {
-        let lastQueue = floorsQueue.value[floorsQueue.value.length - 1];
-
-        // for (let e = 0; e < scaleStore.elevators.length; e++) {
-        if (lastQueue == floorsQueue.value[floorsQueue.value.length - 1]) {
-          for (let q = 0; q < floorsQueue.value.length; q++) {
-            let e = q;
-            //console.log(floorsQueue.value[q]);
-            if (e < scaleStore.elevators.length) {
-              if (scaleStore.elevators[e].status != "InProgress")
-                elevatorStore.startQueue(
-                  scaleStore.elevators[e],
-                  floorsQueue.value[q]
-                );
-
-              console.log(
-                "лифт " +
-                  scaleStore.elevators[e].id +
-                  " Отправился выполнять запрос на " +
-                  floorsQueue.value[q] +
-                  " этаж"
+        for (let q = 0; q < floorsQueue.value.length; q++) {
+          let e = q;
+          if (e < scaleStore.elevators.length) {
+            if (scaleStore.elevators[e].status != "InProgress")
+              elevatorStore.startQueue(
+                scaleStore.elevators[e],
+                floorsQueue.value[q]
               );
-              e++;
-            }
+           
+
+            console.log(
+              "лифт " +
+                scaleStore.elevators[e].id +
+                " Отправился выполнять запрос на " +
+                floorsQueue.value[q] +
+                " этаж"
+            );
+            e++;
           }
-          // }
         }
-
-        // scaleStore.elevators.forEach((e) => {
-        //   if (e.status != "inProgress") {
-        //     floorsQueue.value.forEach((queue) => {
-        //       e.destination = queue + 1;
-
-        //       elevatorStore.startQueue(scaleStore.elevators[e.id - 1]);
-        //     });
-        //   }
-        // });
-
-        // floorsQueue.value.forEach((e) => {
-        //   elevatorStore.startQueue(e.elevator);
-        // });
-
-        // elevatorStore.startQueue(selectRestingElevator());
-        // elevateDelivered();
-        // setQueueToLocalStorage();
       },
       { deep: true }
     );

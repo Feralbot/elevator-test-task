@@ -21,6 +21,7 @@
       >
         убрать лифт
       </button>
+      {{ liftingSystemLogic.floorsQueue }}
       <!-- <div
         class="stats"
         v-for="elevator in scaleStore.elevators"
