@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { ref, reactive, watch } from "vue";
 import { useLiftingSystemLogicStore } from "./liftingSystemLogicStore";
 import { useScaleStore } from "./scaleStore";
 
@@ -9,7 +8,9 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
 
   //
   const moveElevator = (elevator) => {
-    return `transform: translateY(${-(elevator.destination - 1) * 160}px)`;
+    return `transform: translateY(${
+      (-(elevator.destination - 1) * 800) / scaleStore.floors
+    }px)`;
   };
   const smoothElevate = (elevator) => {
     return `transition: transform ${elevator.speed}s`;
@@ -53,10 +54,7 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     changeDestination(elevator, queue);
     changeSpeed(elevator);
     changeDirection(elevator);
-    // moveElevator(elevator);
-    // smoothElevate(elevator);
-    // elevator.status = "inProgress";
-    setInProgress(elevator);
+     setInProgress(elevator);
     //
     document.getElementById(elevator.id).ontransitionend = () => {
       changePosition(elevator);

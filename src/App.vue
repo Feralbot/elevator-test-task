@@ -3,11 +3,25 @@
     <elevatorComponent />
     <floorComponent />
     <div class="commandPannel">
-      <button @click="scaleStore.increaseFloor">Добавить этаж</button>
-      <button @click="scaleStore.decreaseFloor">убрать этаж</button>
-      <button @click="scaleStore.increaseElevators">Добавить лифт</button>
-      <button @click="scaleStore.decreaseElevators">убрать лифт</button>
-      <div
+      <button class="commandPannel--button" @click="scaleStore.increaseFloor">
+        Добавить этаж
+      </button>
+      <button class="commandPannel--button" @click="scaleStore.decreaseFloor">
+        убрать этаж
+      </button>
+      <button
+        class="commandPannel--button"
+        @click="scaleStore.increaseElevators"
+      >
+        Добавить лифт
+      </button>
+      <button
+        class="commandPannel--button"
+        @click="scaleStore.decreaseElevators"
+      >
+        убрать лифт
+      </button>
+      <!-- <div
         class="stats"
         v-for="elevator in scaleStore.elevators"
         :key="elevator"
@@ -19,10 +33,7 @@
         <div class="status">status: {{ elevator.status }}</div>
         <div class="direction">direction: {{ elevator.direction }}</div>
       </div>
-      QUEUE {{ liftingSystemLogic.floorsQueue }}
-      <button @click="elevatorStore.startQueue(scaleStore.elevators[0])">
-        12312
-      </button>
+      QUEUE {{ liftingSystemLogic.floorsQueue }} -->
     </div>
   </main>
 </template>
@@ -35,9 +46,9 @@
 
 // [ ]- Хранение информации о позиционировании и анимации лифта в модуле состояния  //  перенести
 // [!!]- Трудночитаемая история коммитов (дублирования, не совсем понятные месседжи) // Коммитить важные вещи, конкретнее описывать коммиты
-// [Х?]- Неочевидная смена статусов (разные статусы выставляются в компоненте и модуле состояния, некоторые напрямую, некоторые через функцию)
+// [ ]- Неочевидная смена статусов (разные статусы выставляются в компоненте и модуле состояния, некоторые напрямую, некоторые через функцию)
 //       //Вынес состояния лифта в отдельный стор, стало чуть лучше, но не идеально, по сути, они также задаются через разные функции в разных компонентах.
-// [X?]- Не сохраняется очередь этажей при перезагрузке страницы // Пофиксил, но костыльно, через SetTimeout ({..},1).
+// [ ]- Не сохраняется очередь этажей при перезагрузке страницы // Пофиксил, но костыльно, через SetTimeout ({..},1).
 //       Состояние inProgress сохраняется при перезагрузке страницы, из за watcher'а на currentFloor.
 //       Пробовал разные варианты, выбраный оказался лучшим на текущий момент.
 

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, reactive, watch } from "vue";
+import { ref, watch } from "vue";
 import { useElevatorStore } from "./elevatorStore";
 import { useScaleStore } from "./scaleStore";
 export const useLiftingSystemLogicStore = defineStore(
@@ -19,7 +19,9 @@ export const useLiftingSystemLogicStore = defineStore(
       }
     };
     const addToQueue = (floor) => {
-      floorsQueue.value.push(floor);
+      if (!floorsQueue.value.includes(floor)) {
+        floorsQueue.value.push(floor);
+      }
     };
 
     const elevateDelivered = () => {
@@ -28,31 +30,31 @@ export const useLiftingSystemLogicStore = defineStore(
 
     watch(
       floorsQueue.value,
-      (newValue, oldvalue) => {
-        //console.log(newValue, oldvalue);
-        //  console.log(floorsQueue.value[floorsQueue.value.length - 1]);
-        //  console.log(newValue[newValue.length - 1]);
-        // console.log(scaleStore.elevators[e]);
-        // for (let e = 0; e < scaleStore.elevators.length; e++) {
+      () => {
+        let lastQueue = floorsQueue.value[floorsQueue.value.length - 1];
 
-        for (let q = 0; q < floorsQueue.value.length; q++) {
-          let e = q;
-          //console.log(floorsQueue.value[q]);
-          if (e < scaleStore.elevators.length) {
-            if (scaleStore.elevators[e].status != "InProgress")
-              elevatorStore.startQueue(
-                scaleStore.elevators[e],
-                floorsQueue.value[q]
+        // for (let e = 0; e < scaleStore.elevators.length; e++) {
+        if (lastQueue == floorsQueue.value[floorsQueue.value.length - 1]) {
+          for (let q = 0; q < floorsQueue.value.length; q++) {
+            let e = q;
+            //console.log(floorsQueue.value[q]);
+            if (e < scaleStore.elevators.length) {
+              if (scaleStore.elevators[e].status != "InProgress")
+                elevatorStore.startQueue(
+                  scaleStore.elevators[e],
+                  floorsQueue.value[q]
+                );
+
+              console.log(
+                "лифт " +
+                  scaleStore.elevators[e].id +
+                  " Отправился выполнять запрос на " +
+                  floorsQueue.value[q] +
+                  " этаж"
               );
-            e++;
+              e++;
+            }
           }
-          //   console.log(
-          //     "лифт " +
-          //       scaleStore.elevators[e].id +
-          //       " Отправился выполнять запрос на " +
-          //       floorsQueue.value[q] +
-          //       " этаж"
-          //   );
           // }
         }
 

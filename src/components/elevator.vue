@@ -11,18 +11,20 @@
       :style="[
         elevatorStore.moveElevator(elevator),
         elevatorStore.smoothElevate(elevator),
+        scaleStore.elevatorHeight,
+        scaleStore.elevatorTop,
       ]"
     >
       <div class="elevator-cabine-table">
         <div class="elevator-cabine-table-text"></div>
         {{ elevator.direction }}
-        {{ elevator.position }}
+        {{ elevator.destination }}
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted } from "vue";
 import { useElevatorStore } from "../stores/elevatorStore";
 import { useScaleStore } from "../stores/scaleStore";
 const elevatorStore = useElevatorStore();

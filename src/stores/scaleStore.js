@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useElevatorStore } from "./elevatorStore";
 
 export const useScaleStore = defineStore("scaleStore", () => {
@@ -57,6 +57,12 @@ export const useScaleStore = defineStore("scaleStore", () => {
       floors.value = JSON.parse(FloorsAmmountData);
     }
   };
+  const elevatorHeight = computed(() => {
+    return `height: ${799 / floors.value}px`;
+  });
+  const elevatorTop = computed(() => {
+    return `top: ${800 - 800 / floors.value}px`;
+  });
   watch(floors, () => {
     //setScalingDatatoLocalStorage();
   });
@@ -69,9 +75,11 @@ export const useScaleStore = defineStore("scaleStore", () => {
   );
   return {
     floors,
+    elevators,
+    elevatorHeight,
+    elevatorTop,
     increaseFloor,
     decreaseFloor,
-    elevators,
     increaseElevators,
     decreaseElevators,
     setScalingDatatoLocalStorage,
