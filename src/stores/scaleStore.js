@@ -1,8 +1,11 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
+import { useElevatorStore } from "./elevatorStore";
+
 export const useScaleStore = defineStore("scaleStore", () => {
+  const elevatorStore = useElevatorStore();
   const floors = ref(5);
-  const elevators = ref(1);
+  const elevators = ref([elevatorStore.elevator]);
 
   const increaseFloor = () => {
     floors.value++;

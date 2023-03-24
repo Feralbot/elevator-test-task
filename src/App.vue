@@ -1,9 +1,6 @@
 <template>
   <main>
-    <elevatorComponent
-      v-for="elevator in scaleStore.elevators"
-      :key="elevator"
-    />
+    <elevatorComponent />
     <floorComponent />
     <div class="commandPannel">
       <button @click="scaleStore.increaseFloor">Добавить этаж</button>
@@ -36,14 +33,12 @@
 // [ ]- Добавить в LocalStorage Сколько этажей и лифтов, иначе будет странно.
 import { onMounted } from "vue";
 import { useElevatorStore } from "./stores/elevatorStore";
-import { useElevatorStatusStore } from "./stores/elevatorStatusStore";
 import { useScaleStore } from "./stores/scaleStore";
 
 import floorComponent from "./components/floor.vue";
 import elevatorComponent from "./components/elevator.vue";
 
 const elevatorStore = useElevatorStore();
-const elevatorStatusStore = useElevatorStatusStore();
 const scaleStore = useScaleStore();
 onMounted(() => {
   scaleStore.getScalingDataFromLocalStorage();
