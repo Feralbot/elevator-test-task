@@ -13,13 +13,13 @@
         class="commandPannel--button"
         @click="scaleStore.increaseElevators"
       >
-        Добавить лифт
+        Добавить лифт 
       </button>
       <button
         class="commandPannel--button"
         @click="scaleStore.decreaseElevators"
       >
-        убрать лифт
+        Убрать лифт
       </button>
       {{ liftingSystemLogic.floorsQueue }}
       <!-- <div
