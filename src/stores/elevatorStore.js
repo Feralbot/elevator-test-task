@@ -61,6 +61,11 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     document.getElementById(elevator.id).ontransitionend = () => {
       changePosition(elevator);
       setArrived(elevator);
+      liftingSystemLogic.floorsQueueWithElevators.forEach((task) => {
+        if ((task.floor == queue && task.elevator == elevator.id)) {
+          task.status = "done";
+        }
+      });
       changeDirection(elevator);
       setTimeout(() => {
         setRest(elevator);

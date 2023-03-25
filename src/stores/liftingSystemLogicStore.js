@@ -22,14 +22,25 @@ export const useLiftingSystemLogicStore = defineStore(
     const addToQueue = (floor) => {
       if (!floorsQueue.value.includes(floor)) {
         floorsQueue.value.push(floor);
-        floorsQueueWithElevators.value.push({ floor: floor, elevator: "" });
+        floorsQueueWithElevators.value.push({
+          floor: floor,
+          elevator: "",
+          status: "inQueue",
+        });
       }
     };
     const addToQueueWithElevators = (elevator) => {
       floorsQueueWithElevators.value.find((q) => {
         q.elevator == "";
         if (elevator.status == "rest" && q.elevator == "") {
-          q.elevator = elevator.id;
+          if (
+            floorsQueueWithElevators.value.forEach((task) => {
+              if (task.status == "inQueue" && task.elevator == elevator.id) {
+                return;
+              }
+            })
+          )
+            q.elevator = elevator.id;
         }
       });
     };
@@ -55,72 +66,28 @@ export const useLiftingSystemLogicStore = defineStore(
           e++;
         }
 
-        floorsQueueWithElevators.value.forEach((queue) => {
+        floorsQueueWithElevators.value.find((queue) => {
           if (queue.elevator == "") {
-            console.log("Не назначен лифт на " + queue.floor + " Этаж");
+            // console.log("Не назначен лифт на " + queue.floor + " Этаж");
             if (
               scaleStore.elevators.find(
                 (elevator) => elevator.status == "rest"
               ) == undefined
             ) {
-              console.log("все лифты на текущий момент заняты");
-            } else
+              //  console.log("все лифты на текущий момент заняты");
+            } else {
               elevatorStore.startQueue(
                 scaleStore.elevators.find(
                   (elevator) => elevator.status == "rest"
                 ),
                 queue.floor
               );
+            }
           }
         });
-
-        //  console.log(
-        //    floorsQueueWithElevators.value.find((queue) => queue.elevator == "")
-        //  );
-        // while (
-        //   floorsQueueWithElevators.value.find(
-        //     (queue) => queue.elevator == ""
-        //   ) == false
-        // ) {
-        //   if (
-        //     scaleStore.elevators.find(
-        //       (elevator) => elevator.status == "rest"
-        //     ) != undefined
-        //   ) {
-        //     let elevator = scaleStore.elevators.find(
-        //       (elevator) => elevator.status == "rest"
-        //     );
-        //     elevatorStore.startQueue(
-        //       elevator,
-        //       floorsQueueWithElevators.value.find(
-        //         (queue) => queue.elevator == ""
-        //       )
-        //     );
-        //   }
-        // }
       },
       { deep: true }
     );
-    // watch(
-    //   floorsQueueWithElevators.value,
-    //   () => {
-    //     // if (
-    //     //   floorsQueueWithElevators.value.forEach((queue) => {
-    //     //     if (queue.elevator == "") {
-    //     //       let elevator = scaleStore.elevators.find(
-    //     //         (elevator) => elevator.status == "rest"
-    //     //       );
-    //     //       console.log(elevator == undefined);
-    //     //       //if (elevator.id) {
-    //     //         // elevatorStore.startQueue(elevator, queue.floor);
-    //     //     //  }
-    //     //     }
-    //     //   })
-    //     // )
-    //     //   console.log("123");
-    //   },
-    //   { deep: true }
-    // );
     return {
       floorsQueue,
       setQueueToLocalStorage,
