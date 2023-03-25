@@ -27,9 +27,14 @@
 import { onMounted } from "vue";
 import { useElevatorStore } from "../stores/elevatorStore";
 import { useScaleStore } from "../stores/scaleStore";
+import { useLiftingSystemLogicStore } from "../stores/liftingSystemLogicStore";
 const elevatorStore = useElevatorStore();
 const scaleStore = useScaleStore();
+const liftingSystemLogic = useLiftingSystemLogicStore();
+
 onMounted(() => {
+  scaleStore.getScalingDataFromLocalStorage();
+  liftingSystemLogic.getQueueFromLocalStorage();
   elevatorStore.resetAfterReloadPage();
 });
 </script>
