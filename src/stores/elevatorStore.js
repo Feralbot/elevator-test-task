@@ -17,6 +17,8 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   };
   const changeDestination = (elevator, queue) => {
     if (liftingSystemLogic.floorsQueue[0]) {
+      liftingSystemLogic.addToQueueWithElevators(elevator);
+      // liftingSystemLogic.floorsQueueWithElevators.push({ floor: liftingSystemLogic.floorsQueue.filter(q=>q=queue), elevator: elevator.id });
       return (elevator.destination = queue);
     } else return (elevator.destination = elevator.position);
   };

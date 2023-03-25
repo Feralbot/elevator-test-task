@@ -3,7 +3,9 @@
     <elevatorComponent />
     <floorComponent />
     <commandPanel />
+    {{ liftingSystemLogic.floorsQueueWithElevators }}
   </main>
+
 </template>
 
 <script setup>
