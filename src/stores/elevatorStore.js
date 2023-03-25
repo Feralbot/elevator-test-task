@@ -57,12 +57,17 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
     changeSpeed(elevator);
     changeDirection(elevator);
     setInProgress(elevator);
+    setTimeout(() => {
+      if (elevator.position == elevator.destination) {
+        setRest(elevator);
+      }
+    }, 100);
     //
     document.getElementById(elevator.id).ontransitionend = () => {
       changePosition(elevator);
       setArrived(elevator);
       liftingSystemLogic.floorsQueueWithElevators.forEach((task) => {
-        if ((task.floor == queue && task.elevator == elevator.id)) {
+        if (task.floor == queue && task.elevator == elevator.id) {
           task.status = "done";
         }
       });

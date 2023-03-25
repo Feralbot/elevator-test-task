@@ -33,14 +33,18 @@ export const useLiftingSystemLogicStore = defineStore(
       floorsQueueWithElevators.value.find((q) => {
         q.elevator == "";
         if (elevator.status == "rest" && q.elevator == "") {
-          if (
-            floorsQueueWithElevators.value.forEach((task) => {
-              if (task.status == "inQueue" && task.elevator == elevator.id) {
-                return;
-              }
-            })
-          )
-            q.elevator = elevator.id;
+          // if (
+          //   floorsQueueWithElevators.value.forEach((task) => {
+          //     if (
+          //       task.status == "inQueue" &&
+          //       task.elevator == elevator.id &&
+          //       floorsQueueWithElevators.value[0] == task
+          //     ) {
+          //       return (q.elevator = "");
+          //     }
+          //   })
+          // )
+          return (q.elevator = elevator.id);
         }
       });
     };
