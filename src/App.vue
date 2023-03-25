@@ -2,40 +2,7 @@
   <main>
     <elevatorComponent />
     <floorComponent />
-    <div class="commandPannel">
-      <button class="commandPannel--button" @click="scaleStore.increaseFloor">
-        Добавить этаж
-      </button>
-      <button class="commandPannel--button" @click="scaleStore.decreaseFloor">
-        убрать этаж
-      </button>
-      <button
-        class="commandPannel--button"
-        @click="scaleStore.increaseElevators"
-      >
-        Добавить лифт 
-      </button>
-      <button
-        class="commandPannel--button"
-        @click="scaleStore.decreaseElevators"
-      >
-        Убрать лифт
-      </button>
-      {{ liftingSystemLogic.floorsQueue }}
-      <!-- <div
-        class="stats"
-        v-for="elevator in scaleStore.elevators"
-        :key="elevator"
-      >
-        <div class="id">ID: {{ elevator.id }}</div>
-        <div class="position">position: {{ elevator.position }}</div>
-        <div class="destination">destination: {{ elevator.destination }}</div>
-        <div class="speed">speed: {{ elevator.speed }}</div>
-        <div class="status">status: {{ elevator.status }}</div>
-        <div class="direction">direction: {{ elevator.direction }}</div>
-      </div>
-      QUEUE {{ liftingSystemLogic.floorsQueue }} -->
-    </div>
+    <commandPanel />
   </main>
 </template>
 
@@ -60,11 +27,12 @@
 // [ ]- Убрать панель с кнопками в компонент
 // [ ]- Добавить в LocalStorage Сколько этажей и лифтов, иначе будет странно.
 import { onMounted } from "vue";
-import { useElevatorStore } from "./stores/elevatorStore";
-import { useScaleStore } from "./stores/scaleStore";
-
 import floorComponent from "./components/floor.vue";
 import elevatorComponent from "./components/elevator.vue";
+import commandPanel from "./components/commandPanel.vue";
+
+import { useElevatorStore } from "./stores/elevatorStore";
+import { useScaleStore } from "./stores/scaleStore";
 import { useLiftingSystemLogicStore } from "./stores/liftingSystemLogicStore";
 
 const elevatorStore = useElevatorStore();
