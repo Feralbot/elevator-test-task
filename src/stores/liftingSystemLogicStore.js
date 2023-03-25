@@ -12,11 +12,21 @@ export const useLiftingSystemLogicStore = defineStore(
 
     const setQueueToLocalStorage = () => {
       localStorage.setItem("floorsQueue", JSON.stringify(floorsQueue.value));
+      localStorage.setItem(
+        "floorsQueueWithElevators",
+        JSON.stringify(floorsQueueWithElevators.value)
+      );
     };
     const getQueueFromLocalStorage = () => {
       const queueData = localStorage.getItem("floorsQueue");
       if (queueData) {
         floorsQueue.value = JSON.parse(queueData);
+      }
+      const queueWithElevatorsData = localStorage.getItem(
+        "floorsQueueWithElevators"
+      );
+      if (queueWithElevatorsData) {
+        floorsQueueWithElevators.value = JSON.parse(queueWithElevatorsData);
       }
     };
     const addToQueue = (floor) => {
@@ -56,6 +66,7 @@ export const useLiftingSystemLogicStore = defineStore(
     watch(
       floorsQueue.value,
       () => {
+        console.log("Очередь лифтов изменилась");
         for (let q = 0; q < floorsQueueWithElevators.value.length; q++) {
           let e = q;
           if (
@@ -89,6 +100,9 @@ export const useLiftingSystemLogicStore = defineStore(
             }
           }
         });
+
+        scaleStore.setScalingDatatoLocalStorage();
+        setQueueToLocalStorage();
       },
       { deep: true }
     );

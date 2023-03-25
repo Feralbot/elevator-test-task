@@ -6,7 +6,6 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   const liftingSystemLogic = useLiftingSystemLogicStore();
   const scaleStore = useScaleStore();
 
-  //
   const moveElevator = (elevator) => {
     return `transform: translateY(${
       (-(elevator.destination - 1) * 800) / scaleStore.floors
@@ -18,7 +17,6 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   const changeDestination = (elevator, queue) => {
     if (liftingSystemLogic.floorsQueue[0]) {
       liftingSystemLogic.addToQueueWithElevators(elevator);
-      // liftingSystemLogic.floorsQueueWithElevators.push({ floor: liftingSystemLogic.floorsQueue.filter(q=>q=queue), elevator: elevator.id });
       return (elevator.destination = queue);
     } else return (elevator.destination = elevator.position);
   };
@@ -49,11 +47,10 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   const setArrived = (elevator) => {
     return (elevator.status = "arrived");
   };
-  //
-  //
 
   const startQueue = (elevator, queue) => {
     changeDestination(elevator, queue);
+    console.log("Лифт " + elevator.id + "Едет на  " + queue + " этаж");
     changeSpeed(elevator);
     changeDirection(elevator);
     setInProgress(elevator);
@@ -62,7 +59,6 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
         setRest(elevator);
       }
     }, 100);
-    //
     document.getElementById(elevator.id).ontransitionend = () => {
       changePosition(elevator);
       setArrived(elevator);
@@ -80,16 +76,44 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
   };
 
   const resetAfterReloadPage = () => {
-    // liftingSystemLogic.getQueueFromLocalStorage();
+    console.log("page loaded");
     // scaleStore.elevators.forEach((elevator) => {
-    //   elevator.destination = elevator.position;
-    //   moveElevator(elevator);
-    //   if (liftingSystemLogic.floorsQueue[0]) {
-    //     setTimeout(() => {
-    //       startQueue(elevator);
-    //     }, 1);
+    //   console.log(elevator);
+    //   //setRest(elevator);
+    //   setTimeout(() => {
+    //     startQueue(elevator, elevator.destination);
+    //   }, 100);
+    // });
+
+    // scaleStore.elevators.forEach((elevator) => {
+    //   setRest(elevator);
+    //   console.log(
+    //     "Лифт находится на позиции " +
+    //       elevator.position +
+    //       "И планирует ехать в " +
+    //       elevator.destination
+    //   );
+    //   liftingSystemLogic.floorsQueue.shift();
+    // });
+
+    // liftingSystemLogic.floorsQueueWithElevators.forEach((task) => {
+    //   // console.log(task.elevator);
+    //   if (task.status == "inQueue" && task.elevator != "") {
+    //     console.log(
+    //       "но вообще лифт " +
+    //         task.elevator +
+    //         "Должен поехать на этаж " +
+    //         task.floor
+    //     );
+    //     liftingSystemLogic.elevateDelivered(task.floor);
+    //     // startQueue(
+    //     //   scaleStore.elevators.find((elevator) => elevator.id == task.elevator),
+    //     //   task.floor
+    //     // );
     //   }
     // });
+
+    // console.log("page loaded");
   };
 
   return {

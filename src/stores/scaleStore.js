@@ -64,12 +64,12 @@ export const useScaleStore = defineStore("scaleStore", () => {
     return `top: ${800 - 800 / floors.value}px`;
   });
   watch(floors, () => {
-    //setScalingDatatoLocalStorage();
+    setScalingDatatoLocalStorage();
   });
   watch(
     elevators,
     () => {
-      //  setScalingDatatoLocalStorage();
+        setScalingDatatoLocalStorage();
     },
     { deep: true }
   );

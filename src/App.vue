@@ -5,7 +5,6 @@
     <commandPanel />
     {{ liftingSystemLogic.floorsQueueWithElevators }}
   </main>
-
 </template>
 
 <script setup>
@@ -28,21 +27,13 @@
 // [ ]- Проследить при добавлении этажа высоту подьема лифта
 // [ ]- Убрать панель с кнопками в компонент
 // [ ]- Добавить в LocalStorage Сколько этажей и лифтов, иначе будет странно.
-import { onMounted } from "vue";
 import floorComponent from "./components/floor.vue";
 import elevatorComponent from "./components/elevator.vue";
 import commandPanel from "./components/commandPanel.vue";
-
-import { useElevatorStore } from "./stores/elevatorStore";
-import { useScaleStore } from "./stores/scaleStore";
 import { useLiftingSystemLogicStore } from "./stores/liftingSystemLogicStore";
 
-const elevatorStore = useElevatorStore();
-const scaleStore = useScaleStore();
+
 const liftingSystemLogic = useLiftingSystemLogicStore();
-onMounted(() => {
-  scaleStore.getScalingDataFromLocalStorage();
-});
 </script>
 <style src="./styles/reset.css"></style>
 <style src="./styles/main.css"></style>
