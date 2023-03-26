@@ -11,22 +11,24 @@ export const useLiftingSystemLogicStore = defineStore(
     const floorsQueueWithElevators = ref([]);
 
     const setQueueToLocalStorage = () => {
-      localStorage.setItem("floorsQueue", JSON.stringify(floorsQueue.value));
       localStorage.setItem(
         "floorsQueueWithElevators",
         JSON.stringify(floorsQueueWithElevators.value)
       );
+      localStorage.setItem("floorsQueue", JSON.stringify(floorsQueue.value));
     };
+
     const getQueueFromLocalStorage = () => {
-      const queueData = localStorage.getItem("floorsQueue");
-      if (queueData) {
-        floorsQueue.value = JSON.parse(queueData);
-      }
       const queueWithElevatorsData = localStorage.getItem(
         "floorsQueueWithElevators"
       );
       if (queueWithElevatorsData) {
         floorsQueueWithElevators.value = JSON.parse(queueWithElevatorsData);
+      }
+
+      const queueData = localStorage.getItem("floorsQueue");
+      if (queueData) {
+        floorsQueue.value = JSON.parse(queueData);
       }
     };
     const addToQueue = (floor) => {
@@ -43,17 +45,6 @@ export const useLiftingSystemLogicStore = defineStore(
       floorsQueueWithElevators.value.find((q) => {
         q.elevator == "";
         if (elevator.status == "rest" && q.elevator == "") {
-          // if (
-          //   floorsQueueWithElevators.value.forEach((task) => {
-          //     if (
-          //       task.status == "inQueue" &&
-          //       task.elevator == elevator.id &&
-          //       floorsQueueWithElevators.value[0] == task
-          //     ) {
-          //       return (q.elevator = "");
-          //     }
-          //   })
-          // )
           return (q.elevator = elevator.id);
         }
       });
@@ -66,7 +57,6 @@ export const useLiftingSystemLogicStore = defineStore(
     watch(
       floorsQueue.value,
       () => {
-        console.log("Очередь лифтов изменилась");
         for (let q = 0; q < floorsQueueWithElevators.value.length; q++) {
           let e = q;
           if (
@@ -80,16 +70,13 @@ export const useLiftingSystemLogicStore = defineStore(
           }
           e++;
         }
-
         floorsQueueWithElevators.value.find((queue) => {
           if (queue.elevator == "") {
-            // console.log("Не назначен лифт на " + queue.floor + " Этаж");
             if (
               scaleStore.elevators.find(
                 (elevator) => elevator.status == "rest"
               ) == undefined
             ) {
-              //  console.log("все лифты на текущий момент заняты");
             } else {
               elevatorStore.startQueue(
                 scaleStore.elevators.find(
@@ -100,7 +87,6 @@ export const useLiftingSystemLogicStore = defineStore(
             }
           }
         });
-
         scaleStore.setScalingDatatoLocalStorage();
         setQueueToLocalStorage();
       },

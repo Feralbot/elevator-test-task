@@ -12,20 +12,9 @@
     <button class="commandPannel--button" @click="scaleStore.decreaseElevators">
       Убрать лифт
     </button>
-    {{ liftingSystemLogic.floorsQueue }}
-
-    <div>
-      <div v-for="elevator in scaleStore.elevators">
-        {{ elevator.status }}
-        <div>position {{ elevator.position }}</div>
-        <div>destination {{ elevator.destination }}</div>
-      </div>
-    </div>
   </div>
 </template>
 <script setup>
 import { useScaleStore } from "../stores/scaleStore";
-import { useLiftingSystemLogicStore } from "../stores/liftingSystemLogicStore";
 const scaleStore = useScaleStore();
-const liftingSystemLogic = useLiftingSystemLogicStore();
 </script>

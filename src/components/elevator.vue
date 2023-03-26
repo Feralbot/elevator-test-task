@@ -33,8 +33,8 @@ const scaleStore = useScaleStore();
 const liftingSystemLogic = useLiftingSystemLogicStore();
 
 onMounted(() => {
-  scaleStore.getScalingDataFromLocalStorage();
-  liftingSystemLogic.getQueueFromLocalStorage();
-  elevatorStore.resetAfterReloadPage();
+  //liftingSystemLogic.getQueueFromLocalStorage();
+  //scaleStore.getScalingDataFromLocalStorage();
+ // elevatorStore.resetAfterReloadPage();
 });
 </script>

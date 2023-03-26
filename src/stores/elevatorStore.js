@@ -50,7 +50,6 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
 
   const startQueue = (elevator, queue) => {
     changeDestination(elevator, queue);
-    console.log("Лифт " + elevator.id + "Едет на  " + queue + " этаж");
     changeSpeed(elevator);
     changeDirection(elevator);
     setInProgress(elevator);
@@ -77,43 +76,6 @@ export const useElevatorStore = defineStore("elevatorStore", () => {
 
   const resetAfterReloadPage = () => {
     console.log("page loaded");
-    // scaleStore.elevators.forEach((elevator) => {
-    //   console.log(elevator);
-    //   //setRest(elevator);
-    //   setTimeout(() => {
-    //     startQueue(elevator, elevator.destination);
-    //   }, 100);
-    // });
-
-    // scaleStore.elevators.forEach((elevator) => {
-    //   setRest(elevator);
-    //   console.log(
-    //     "Лифт находится на позиции " +
-    //       elevator.position +
-    //       "И планирует ехать в " +
-    //       elevator.destination
-    //   );
-    //   liftingSystemLogic.floorsQueue.shift();
-    // });
-
-    // liftingSystemLogic.floorsQueueWithElevators.forEach((task) => {
-    //   // console.log(task.elevator);
-    //   if (task.status == "inQueue" && task.elevator != "") {
-    //     console.log(
-    //       "но вообще лифт " +
-    //         task.elevator +
-    //         "Должен поехать на этаж " +
-    //         task.floor
-    //     );
-    //     liftingSystemLogic.elevateDelivered(task.floor);
-    //     // startQueue(
-    //     //   scaleStore.elevators.find((elevator) => elevator.id == task.elevator),
-    //     //   task.floor
-    //     // );
-    //   }
-    // });
-
-    // console.log("page loaded");
   };
 
   return {
